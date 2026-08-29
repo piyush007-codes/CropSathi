@@ -20,6 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/auth', authRoutes);
 
 // Health Check
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'CropSathi backend is fully connected!' });
+});
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',

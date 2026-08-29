@@ -114,3 +114,31 @@ export const getMe = async (req, res) => {
     });
   }
 };
+
+export const updateLocation = async (req, res) => {
+  try {
+    const { latitude, longitude, fullAddress, addressComponents } = req.body;
+
+    const updateFields = {
+      'farmDetails.latitude': latitude,
+      'farmDetails.longitude': longitude,
+      'farmDetails.fullAddress': fullAddress,
+    };
+
+    if (addressComponents) {
+      if (addressComponents.village) updateFields['farmDetails.village'] = addressComponents.village;
+      if (addressComponents.district) updateFields['farmDetails.district'] = addressComponents.district;
+      if (addressComponents.state) updateFields['farmDetails.state'] = addressComponents.state;
+      if (addressComponents.country) updateFields['farmDetails.country'] = addressComponents.country;
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      updateFields,
+      { new: true }
+    );
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

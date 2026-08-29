@@ -4,7 +4,9 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './src/config/db.js';
-import authRoutes from './src/routes/authRoutes.js';
+import authRoutes from './src/routes/authroutes.js';
+import { protect } from './src/middleware/authMiddleware.js';
+import User from './src/models/User.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -23,14 +25,23 @@ app.use('/api/auth', authRoutes);
 app.get('/api/test', (req, res) => {
   res.json({ message: 'CropSathi backend is fully connected!' });
 });
-app.get('/api/user/profile', (req, res) => {
-  res.status(200).json({
-    success: true,
-    user: {
-      name: 'Ramesh Kumar',
-      location: 'Taloja Phase-1'
+app.get('/api/user/profile', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
-  });
+    res.status(200).json({
+      success: true,
+      user: {
+        name: user.name,
+        phoneNumber: user.phoneNumber,
+        farmDetails: user.farmDetails,
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 });
 app.get('/api/health', (req, res) => {
   res.status(200).json({

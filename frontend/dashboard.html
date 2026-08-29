@@ -27,6 +27,32 @@
   testBackendConnection();
 
   </script>
+  <script>
+    async function syncUserProfile() {
+  try {
+    const response = await fetch('http://localhost:5000/api/user/profile');
+    const result = await response.json();
+
+    if (result.success) {
+      const user = result.user;
+
+      // Update DOM elements dynamically
+      const nameElem = document.getElementById('userName');
+      const locationElem = document.getElementById('userLocation');
+
+      if (nameElem) nameElem.textContent = user.name;
+      if (locationElem) locationElem.textContent = user.location;
+
+      console.log('✅ User data synced successfully:', user);
+    }
+  } catch (error) {
+    console.error('❌ Failed to sync user data:', error);
+  }
+}
+
+// Run when dashboard loads
+document.addEventListener('DOMContentLoaded', syncUserProfile);
+  </script>
   <style>
     /* Typography Rules from design.md */
     body {
@@ -52,6 +78,8 @@
   </style>
 </head>
 <body class="bg-[#fbf9f8] text-[#1b1c1c] min-h-screen flex">
+<!-- Inside your existing dashboard header section -->
+<!-- Inside your existing dashboard header section -->
 
   <!-- Sidebar Navigation -->
   <aside class="w-64 bg-[#f6f3f2] border-r border-[#e4e2e1] flex flex-col justify-between p-6 hidden md:flex fixed left-0 top-0 bottom-0 overflow-y-auto">
@@ -100,9 +128,9 @@
     <!-- Top Header -->
     <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-[#1b1c1c]">Hello, Harris 👋</h1>
+        <h1 class="text-3xl font-bold text-[#1b1c1c]">Hello, <span id="userName">Harris</span></h1>
         <p class="text-[#3f4941] text-sm flex items-center gap-1 mt-1">
-          <i data-lucide="map-pin" class="w-4 h-4 text-[#933302]"></i> Central Valley
+          <i data-lucide="map-pin" class="w-4 h-4 text-[#933302]"></i> <span id="userLocation">Central Valley</span>
         </p>
       </div>
 
@@ -428,5 +456,36 @@
       scrollContainer.scrollLeft += evt.deltaY;
     });
   </script>
+ <script>
+  async function syncUserProfile() {
+    try {
+      console.log('🔄 Fetching user profile from backend...');
+      const response = await fetch('http://localhost:5000/api/user/profile');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('📦 Data received from backend:', data);
+
+      if (data.success && data.user) {
+        const nameElem = document.getElementById('userName');
+        const locElem = document.getElementById('userLocation');
+
+        if (nameElem) nameElem.textContent = data.user.name;
+        if (locElem) locElem.textContent = data.user.location;
+        console.log('✅ UI updated successfully!');
+      }
+    } catch (error) {
+      console.error('❌ Failed to sync user data:', error);
+    }
+  }
+
+  // Trigger sync on load
+  window.addEventListener('DOMContentLoaded', syncUserProfile);
+  // Backup direct call
+  syncUserProfile();
+</script>
 </body>
 </html>

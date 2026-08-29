@@ -8,6 +8,25 @@
   <!-- Google Fonts: Be Vietnam Pro & Noto Sans as specified in design.md -->
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+  async function testBackendConnection() {
+    try {
+      const response = await fetch('http://localhost:5000/api/test');
+      const data = await response.json();
+      
+      console.log('✅ Connection Test Success:', data);
+      alert('Connected: ' + data.message);
+    } catch (error) {
+      console.error('❌ Connection Test Failed:', error);
+      alert('Connection failed! Check console for details.');
+    }
+  }
+
+  // Run automatically when page loads
+  testBackendConnection();
+
+  </script>
   <style>
     /* Typography Rules from design.md */
     body {

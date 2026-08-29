@@ -23,6 +23,15 @@ app.use('/api/auth', authRoutes);
 app.get('/api/test', (req, res) => {
   res.json({ message: 'CropSathi backend is fully connected!' });
 });
+app.get('/api/user/profile', (req, res) => {
+  res.status(200).json({
+    success: true,
+    user: {
+      name: 'Ramesh Kumar',
+      location: 'Taloja Phase-1'
+    }
+  });
+});
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',

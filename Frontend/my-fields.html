@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CropSathi - My Fields</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Be Vietnam Pro & Noto Sans as specified in design.md -->
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Typography Rules from design.md */
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      background-color: #fbf9f8;
+      color: #1b1c1c;
+    }
+    h1, h2, h3, h4, .font-headline {
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+    /* Modern Tactile Card Shadow from design.md */
+    .tactile-card {
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-[#fbf9f8] text-[#1b1c1c] min-h-screen flex">
+
+  <!-- Sidebar Navigation -->
+  <aside class="w-64 bg-[#f6f3f2] border-r border-[#e4e2e1] flex flex-col justify-between p-6 hidden md:flex fixed left-0 top-0 bottom-0 overflow-y-auto">
+    <div>
+      <!-- Brand Logo (Forest Green primary theme) -->
+      <div class="flex items-center gap-3 mb-10">
+        <div class="w-10 h-10 rounded-full bg-[#006038] flex items-center justify-center text-[#ffffff] font-bold shadow-md">
+          <i data-lucide="sprout" class="w-6 h-6"></i>
+        </div>
+        <span class="font-headline font-bold text-xl tracking-tight text-[#006038]">CropSathi</span>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="space-y-2">
+        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
+          <i data-lucide="layout-grid" class="w-5 h-5"></i>
+          Dashboard
+        </a>
+        <a href="my-fields.html" class="flex items-center gap-3 px-4 py-3 bg-[#006038] text-[#ffffff] rounded-xl font-semibold transition shadow-sm">
+          <i data-lucide="map-pin" class="w-5 h-5"></i>
+          My Fields
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
+          <i data-lucide="camera" class="w-5 h-5"></i>
+          Diagnose
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
+          <i data-lucide="lightbulb" class="w-5 h-5"></i>
+          Advisory
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom Settings / Profile -->
+    <div class="pt-6 border-t border-[#e4e2e1]">
+      <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
+        <i data-lucide="settings" class="w-5 h-5"></i>
+        Settings
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 p-6 md:p-10 max-w-7xl mx-auto overflow-y-auto md:ml-64">
+
+    <!-- Top Header -->
+    <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-[#1b1c1c]">My Fields</h1>
+        <p class="text-[#3f4941] text-sm flex items-center gap-1 mt-1">
+          <i data-lucide="map-pin" class="w-4 h-4 text-[#933302]"></i> Central Valley
+        </p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="relative hidden sm:block">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#6f7a71]"></i>
+          <input type="text" placeholder="Search fields..." class="bg-[#f0eded] text-sm pl-9 pr-4 py-2.5 rounded-full border border-transparent focus:border-[#006038] outline-none w-60 text-[#1b1c1c]">
+        </div>
+        <button class="w-11 h-11 bg-[#f0eded] hover:bg-[#eae8e7] rounded-full flex items-center justify-center relative transition">
+          <i data-lucide="bell" class="w-5 h-5 text-[#1b1c1c]"></i>
+          <span class="w-2.5 h-2.5 bg-[#933302] rounded-full absolute top-2 right-2 border-2 border-[#fbf9f8]"></span>
+        </button>
+        <div class="w-11 h-11 rounded-full bg-[#f0eded] overflow-hidden border-2 border-[#ffffff] shadow-sm">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250" alt="Harris" class="w-full h-full object-cover">
+        </div>
+      </div>
+    </header>
+
+    <!-- Add New Field Button -->
+    <div class="mb-6">
+      <button class="bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] font-semibold px-6 py-3 rounded-full transition shadow-sm flex items-center gap-2">
+        <i data-lucide="plus" class="w-5 h-5"></i>
+        Add New Field
+      </button>
+    </div>
+
+    <!-- Fields Grid -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Field Card 1 - Golden Valley Field #4 -->
+      <div class="bg-[#f6f3f2] border border-[#e4e2e1] rounded-xl overflow-hidden tactile-card">
+        <!-- Field Image -->
+        <div class="relative h-48 overflow-hidden group">
+          <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1200" alt="Golden Valley Field" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+          <!-- Status Badge -->
+          <div class="absolute top-3 right-3 bg-[#006038] text-[#ffffff] px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#abffc9] animate-pulse"></span>
+            Optimal
+          </div>
+
+          <!-- Crop Info Overlay -->
+          <div class="absolute bottom-3 left-3 right-3">
+            <h3 class="font-bold text-[#ffffff] font-headline text-lg">Golden Valley Field #4</h3>
+            <p class="text-xs text-[#ffffff]/90 flex items-center gap-1 mt-0.5">
+              <i data-lucide="wheat" class="w-3 h-3"></i> Wheat · 7.2 hectares
+            </p>
+          </div>
+        </div>
+
+        <!-- Field Details -->
+        <div class="p-5">
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Health Index</p>
+              <p class="text-lg font-bold text-[#006038] mt-0.5">92%</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Yield Est.</p>
+              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5">7200 kg/ha</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Crop Stage</p>
+              <p class="text-sm font-semibold text-[#1b1c1c] mt-0.5">Maturity</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Sowing Date</p>
+              <p class="text-sm font-semibold text-[#1b1c1c] mt-0.5">Nov 15, 2025</p>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex gap-2">
+            <button class="flex-1 bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] text-sm font-semibold px-4 py-2.5 rounded-full transition">
+              View Details
+            </button>
+            <button class="w-10 h-10 bg-[#f0eded] hover:bg-[#eae8e7] rounded-full flex items-center justify-center transition">
+              <i data-lucide="more-horizontal" class="w-5 h-5 text-[#3f4941]"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Field Card 2 - North Terrace Vineyard -->
+      <div class="bg-[#f6f3f2] border border-[#e4e2e1] rounded-xl overflow-hidden tactile-card">
+        <div class="relative h-48 overflow-hidden group">
+          <img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=1200" alt="North Terrace Vineyard" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+          <div class="absolute top-3 right-3 bg-[#006038] text-[#ffffff] px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#abffc9] animate-pulse"></span>
+            Excellent
+          </div>
+
+          <div class="absolute bottom-3 left-3 right-3">
+            <h3 class="font-bold text-[#ffffff] font-headline text-lg">North Terrace Vineyard</h3>
+            <p class="text-xs text-[#ffffff]/90 flex items-center gap-1 mt-0.5">
+              <span class="text-base">🍇</span> Grapes · 3.5 hectares
+            </p>
+          </div>
+        </div>
+
+        <div class="p-5">
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Health Index</p>
+              <p class="text-lg font-bold text-[#006038] mt-0.5">95%</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Yield Est.</p>
+              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5">8500 kg/ha</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Crop Stage</p>
+              <p class="text-sm font-semibold text-[#1b1c1c] mt-0.5">Fruiting</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Sowing Date</p>
+              <p class="text-sm font-semibold text-[#1b1c1c] mt-0.5">Mar 10, 2025</p>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <button class="flex-1 bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] text-sm font-semibold px-4 py-2.5 rounded-full transition">
+              View Details
+            </button>
+            <button class="w-10 h-10 bg-[#f0eded] hover:bg-[#eae8e7] rounded-full flex items-center justify-center transition">
+              <i data-lucide="more-horizontal" class="w-5 h-5 text-[#3f4941]"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Field Card 3 - West Plot Potato -->
+      <div class="bg-[#f6f3f2] border border-[#ffb599] rounded-xl overflow-hidden tactile-card">
+        <div class="relative h-48 overflow-hidden group">
+          <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=1200" alt="West Plot Potato" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+          <div class="absolute top-3 right-3 bg-[#933302] text-[#ffffff] px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5">
+            <i data-lucide="alert-triangle" class="w-3 h-3"></i>
+            Needs Water
+          </div>
+
+          <div class="absolute bottom-3 left-3 right-3">
+            <h3 class="font-bold text-[#ffffff] font-headline text-lg">West Plot Potato</h3>
+            <p class="text-xs text-[#ffffff]/90 flex items-center gap-1 mt-0.5">
+              <span class="text-base">🥔</span> Potato · 2.8 hectares
+            </p>
+          </div>
+        </div>
+
+        <div class="p-5">
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Health Index</p>
+              <p class="text-lg font-bold text-[#933302] mt-0.5">61%</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Moisture</p>
+              <p class="text-lg font-bold text-[#933302] mt-0.5">45%</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Crop Stage</p>
+              <p class="text-sm font-semibold text-[#1b1c1c] mt-0.5">Vegetative</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Sowing Date</p>
+              <p class="text-sm font-semibold text-[#1b1c1c] mt-0.5">Jul 5, 2026</p>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <button class="flex-1 bg-[#933302] hover:bg-[#b44a1b] text-[#ffffff] text-sm font-semibold px-4 py-2.5 rounded-full transition">
+              Take Action
+            </button>
+            <button class="w-10 h-10 bg-[#f0eded] hover:bg-[#eae8e7] rounded-full flex items-center justify-center transition">
+              <i data-lucide="more-horizontal" class="w-5 h-5 text-[#3f4941]"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Field Card 4 - East Section Rice -->
+      <div class="bg-[#f6f3f2] border border-[#e4e2e1] rounded-xl overflow-hidden tactile-card">
+        <div class="relative h-48 overflow-hidden group">
+          <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&q=80&w=1200" alt="East Section Rice" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+          <div class="absolute top-3 right-3 bg-[#1a7a4c] text-[#ffffff] px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#abffc9] animate-pulse"></span>
+            Good
+          </div>
+
+          <div class="absolute bottom-3 left-3 right-3">
+            <h3 class="font-bold text-[#ffffff] font-headline text-lg">East Section Rice</h3>
+            <p class="text-xs text-[#ffffff]/90 flex items-center gap-1 mt-0.5">
+              <span class="text-base">🌾</span> Rice · 5.0 hectares
+            </p>
+          </div>
+        </div>
+
+        <div class="p-5">
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Health Index</p>
+              <p class="text-lg font-bold text-[#1a7a4c] mt-0.5">78%</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Moisture</p>
+              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5">88%</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Crop Stage</p>
+              <p class="text-sm font-semibold text-[#1b1c1c] mt-0.5">Flowering</p>
+            </div>
+            <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
+              <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Sowing Date</p>
+              <p class="text-sm font-semibold text-[#1b1c1c] mt-0.5">Jun 20, 2026</p>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <button class="flex-1 bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] text-sm font-semibold px-4 py-2.5 rounded-full transition">
+              View Details
+            </button>
+            <button class="w-10 h-10 bg-[#f0eded] hover:bg-[#eae8e7] rounded-full flex items-center justify-center transition">
+              <i data-lucide="more-horizontal" class="w-5 h-5 text-[#3f4941]"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

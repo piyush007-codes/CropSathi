@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CropSathi - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Be Vietnam Pro & Noto Sans as specified in design.md -->
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Typography Rules from design.md */
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      background-color: #fbf9f8;
+      color: #1b1c1c;
+    }
+    h1, h2, h3, h4, .font-headline {
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+    /* Hide scrollbar across all browsers while keeping scroll functionality */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+    /* Modern Tactile Card Shadow from design.md */
+    .tactile-card {
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-[#fbf9f8] text-[#1b1c1c] min-h-screen flex">
+
+  <!-- Sidebar Navigation -->
+  <aside class="w-64 bg-[#f6f3f2] border-r border-[#e4e2e1] flex flex-col justify-between p-6 hidden md:flex fixed left-0 top-0 bottom-0 overflow-y-auto">
+    <div>
+      <!-- Brand Logo (Forest Green primary theme) -->
+      <div class="flex items-center gap-3 mb-10">
+        <div class="w-10 h-10 rounded-full bg-[#006038] flex items-center justify-center text-[#ffffff] font-bold shadow-md">
+          <i data-lucide="sprout" class="w-6 h-6"></i>
+        </div>
+        <span class="font-headline font-bold text-xl tracking-tight text-[#006038]">CropSathi</span>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="space-y-2">
+        <a href="#" class="flex items-center gap-3 px-4 py-3 bg-[#006038] text-[#ffffff] rounded-xl font-semibold transition shadow-sm">
+          <i data-lucide="layout-grid" class="w-5 h-5"></i>
+          Dashboard
+        </a>
+        <a href="my-fields.html" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
+          <i data-lucide="map-pin" class="w-5 h-5"></i>
+          My Fields
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
+          <i data-lucide="camera" class="w-5 h-5"></i>
+          Diagnose
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
+          <i data-lucide="lightbulb" class="w-5 h-5"></i>
+          Advisory
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom Settings / Profile -->
+    <div class="pt-6 border-t border-[#e4e2e1]">
+      <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
+        <i data-lucide="settings" class="w-5 h-5"></i>
+        Settings
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 p-6 md:p-10 max-w-7xl mx-auto overflow-y-auto md:ml-64">
+    
+    <!-- Top Header -->
+    <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-[#1b1c1c]">Hello, Harris 👋</h1>
+        <p class="text-[#3f4941] text-sm flex items-center gap-1 mt-1">
+          <i data-lucide="map-pin" class="w-4 h-4 text-[#933302]"></i> Central Valley
+        </p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="relative hidden sm:block">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#6f7a71]"></i>
+          <input type="text" placeholder="Search crops, tasks..." class="bg-[#f0eded] text-sm pl-9 pr-4 py-2.5 rounded-full border border-transparent focus:border-[#006038] outline-none w-60 text-[#1b1c1c]">
+        </div>
+        <button class="w-11 h-11 bg-[#f0eded] hover:bg-[#eae8e7] rounded-full flex items-center justify-center relative transition">
+          <i data-lucide="bell" class="w-5 h-5 text-[#1b1c1c]"></i>
+          <span class="w-2.5 h-2.5 bg-[#933302] rounded-full absolute top-2 right-2 border-2 border-[#fbf9f8]"></span>
+        </button>
+        <div class="w-11 h-11 rounded-full bg-[#f0eded] overflow-hidden border-2 border-[#ffffff] shadow-sm">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250" alt="Harris" class="w-full h-full object-cover">
+        </div>
+      </div>
+    </header>
+
+    <!-- Weather & Crop Health Section -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+      
+      <!-- LEFT COLUMN: Weather Card + Integrated 4 Metrics Below -->
+      <div class="lg:col-span-5 flex flex-col gap-3">
+        <!-- Main Weather Card (Primary Surface Tone) -->
+        <div class="bg-[#f6f3f2] border border-[#e4e2e1] p-6 rounded-xl relative overflow-hidden flex flex-col justify-between tactile-card">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[#3f4941] font-medium text-sm">Sonoma County</span>
+              <div class="flex items-baseline gap-2 mt-2">
+                <span class="text-6xl font-extrabold text-[#1b1c1c] font-headline">32°</span>
+                <span class="text-xl text-[#3f4941]">C</span>
+              </div>
+            </div>
+            <div class="p-3 bg-[#ffffff] rounded-xl shadow-sm border border-[#e4e2e1]">
+              <i data-lucide="sun" class="w-10 h-10 text-[#933302]"></i>
+            </div>
+          </div>
+
+          <div class="mt-6 flex justify-start">
+            <div class="flex items-center gap-2 bg-[#ffffff] px-4 py-2 rounded-full border border-[#bec9bf] text-xs font-semibold text-[#006038]">
+              <i data-lucide="cloud-sun" class="w-4 h-4 text-[#006038]"></i> Optimal Growth Weather
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Weather Indicators (Underneath Main Card) -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <!-- Soil Temp -->
+          <div class="bg-[#f0eded] p-3.5 rounded-xl border border-[#e4e2e1] flex items-center justify-between">
+            <div>
+              <p class="text-[11px] font-semibold text-[#3f4941]">Soil temp</p>
+              <p class="text-base font-bold text-[#1b1c1c] mt-0.5">+23 C</p>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-[#eae8e7] flex items-center justify-center text-[#933302]">
+              <i data-lucide="thermometer" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <!-- Humidity -->
+          <div class="bg-[#f0eded] p-3.5 rounded-xl border border-[#e4e2e1] flex items-center justify-between">
+            <div>
+              <p class="text-[11px] font-semibold text-[#3f4941]">Humidity</p>
+              <p class="text-base font-bold text-[#1b1c1c] mt-0.5">78%</p>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-[#eae8e7] flex items-center justify-center text-[#006038]">
+              <i data-lucide="droplets" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <!-- Wind -->
+          <div class="bg-[#f0eded] p-3.5 rounded-xl border border-[#e4e2e1] flex items-center justify-between">
+            <div>
+              <p class="text-[11px] font-semibold text-[#3f4941]">Wind</p>
+              <p class="text-base font-bold text-[#1b1c1c] mt-0.5">7 m/s</p>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-[#eae8e7] flex items-center justify-center text-[#006038]">
+              <i data-lucide="wind" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <!-- Precipitation -->
+          <div class="bg-[#f0eded] p-3.5 rounded-xl border border-[#e4e2e1] flex items-center justify-between">
+            <div>
+              <p class="text-[11px] font-semibold text-[#3f4941]">Precipitation</p>
+              <p class="text-base font-bold text-[#1b1c1c] mt-0.5">0 mm</p>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-[#eae8e7] flex items-center justify-center text-[#933302]">
+              <i data-lucide="cloud-rain" class="w-4 h-4"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Mouse-Scrollable Crop Health Meters (Quaternary / Neutral Surface Tone) -->
+      <div class="lg:col-span-7 bg-[#f6f3f2] border border-[#e4e2e1] p-6 rounded-xl flex flex-col justify-between tactile-card">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-lg font-bold text-[#1b1c1c] font-headline">Crop Health Index</h2>
+            <p class="text-xs text-[#3f4941]">Scroll horizontally with mouse wheel</p>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 bg-[#006038] text-[#ffffff] rounded-full flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#abffc9] animate-pulse"></span> Live
+          </span>
+        </div>
+
+        <!-- Hidden Scrollbar Container with Mouse Wheel Listener -->
+        <div id="cropScrollContainer" class="flex gap-4 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none py-1">
+          
+          <!-- Rice Card -->
+          <div class="min-w-[210px] bg-[#ffffff] p-5 rounded-xl border border-[#e4e2e1] flex flex-col items-center tactile-card shrink-0">
+            <div class="flex items-center gap-2 mb-3 self-start">
+              <span class="text-xl">🌾</span>
+              <div>
+                <h3 class="font-bold text-sm text-[#1b1c1c] font-headline">Rice Field</h3>
+                <p class="text-[10px] text-[#3f4941]">Section A1</p>
+              </div>
+            </div>
+
+            <div class="relative w-24 h-24 my-2 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-[#e4e2e1]" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="text-[#006038]" stroke-dasharray="92, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute flex flex-col items-center">
+                <span class="text-xl font-extrabold text-[#1b1c1c] font-headline">92%</span>
+                <span class="text-[9px] font-bold text-[#006038] uppercase tracking-wider">Optimal</span>
+              </div>
+            </div>
+
+            <div class="w-full mt-3 pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
+              <span class="text-[#3f4941]">Moisture</span>
+              <span class="font-semibold text-[#1b1c1c]">88%</span>
+            </div>
+          </div>
+
+          <!-- Corn Card -->
+          <div class="min-w-[210px] bg-[#ffffff] p-5 rounded-xl border border-[#e4e2e1] flex flex-col items-center tactile-card shrink-0">
+            <div class="flex items-center gap-2 mb-3 self-start">
+              <span class="text-xl">🌽</span>
+              <div>
+                <h3 class="font-bold text-sm text-[#1b1c1c] font-headline">Corn Field</h3>
+                <p class="text-[10px] text-[#3f4941]">Section C3</p>
+              </div>
+            </div>
+
+            <div class="relative w-24 h-24 my-2 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-[#e4e2e1]" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="text-[#1a7a4c]" stroke-dasharray="78, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute flex flex-col items-center">
+                <span class="text-xl font-extrabold text-[#1b1c1c] font-headline">78%</span>
+                <span class="text-[9px] font-bold text-[#1a7a4c] uppercase tracking-wider">Good</span>
+              </div>
+            </div>
+
+            <div class="w-full mt-3 pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
+              <span class="text-[#3f4941]">Moisture</span>
+              <span class="font-semibold text-[#1b1c1c]">64%</span>
+            </div>
+          </div>
+
+          <!-- Grapes Card -->
+          <div class="min-w-[210px] bg-[#ffffff] p-5 rounded-xl border border-[#e4e2e1] flex flex-col items-center tactile-card shrink-0">
+            <div class="flex items-center gap-2 mb-3 self-start">
+              <span class="text-xl">🍇</span>
+              <div>
+                <h3 class="font-bold text-sm text-[#1b1c1c] font-headline">Vineyard</h3>
+                <p class="text-[10px] text-[#3f4941]">South Hill</p>
+              </div>
+            </div>
+
+            <div class="relative w-24 h-24 my-2 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-[#e4e2e1]" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="text-[#006038]" stroke-dasharray="95, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute flex flex-col items-center">
+                <span class="text-xl font-extrabold text-[#1b1c1c] font-headline">95%</span>
+                <span class="text-[9px] font-bold text-[#006038] uppercase tracking-wider">Excellent</span>
+              </div>
+            </div>
+
+            <div class="w-full mt-3 pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
+              <span class="text-[#3f4941]">Moisture</span>
+              <span class="font-semibold text-[#1b1c1c]">82%</span>
+            </div>
+          </div>
+
+          <!-- Potato Card (Alert - Terracotta Orange theme) -->
+          <div class="min-w-[210px] bg-[#ffffff] p-5 rounded-xl border border-[#ffb599] flex flex-col items-center tactile-card shrink-0">
+            <div class="flex items-center gap-2 mb-3 self-start">
+              <span class="text-xl">🥔</span>
+              <div>
+                <h3 class="font-bold text-sm text-[#1b1c1c] font-headline">Potato Crop</h3>
+                <p class="text-[10px] text-[#3f4941]">West Plot</p>
+              </div>
+            </div>
+
+            <div class="relative w-24 h-24 my-2 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-[#e4e2e1]" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="text-[#933302]" stroke-dasharray="61, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute flex flex-col items-center">
+                <span class="text-xl font-extrabold text-[#1b1c1c] font-headline">61%</span>
+                <span class="text-[9px] font-bold text-[#933302] uppercase tracking-wider">Needs Water</span>
+              </div>
+            </div>
+
+            <div class="w-full mt-3 pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
+              <span class="text-[#3f4941]">Moisture</span>
+              <span class="font-semibold text-[#1b1c1c]">45%</span>
+            </div>
+          </div>
+
+          <!-- Olive Card -->
+          <div class="min-w-[210px] bg-[#ffffff] p-5 rounded-xl border border-[#e4e2e1] flex flex-col items-center tactile-card shrink-0">
+            <div class="flex items-center gap-2 mb-3 self-start">
+              <span class="text-xl">🫒</span>
+              <div>
+                <h3 class="font-bold text-sm text-[#1b1c1c] font-headline">Olive Grove</h3>
+                <p class="text-[10px] text-[#3f4941]">North Terrace</p>
+              </div>
+            </div>
+
+            <div class="relative w-24 h-24 my-2 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-[#e4e2e1]" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="text-[#006038]" stroke-dasharray="88, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute flex flex-col items-center">
+                <span class="text-xl font-extrabold text-[#1b1c1c] font-headline">88%</span>
+                <span class="text-[9px] font-bold text-[#006038] uppercase tracking-wider">Optimal</span>
+              </div>
+            </div>
+
+            <div class="w-full mt-3 pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
+              <span class="text-[#3f4941]">Moisture</span>
+              <span class="font-semibold text-[#1b1c1c]">76%</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Commodities & Food Selector -->
+    <section class="mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-[#1b1c1c] font-headline">Commodities & Food</h2>
+        <a href="#" class="text-xs font-semibold text-[#006038] hover:underline">View All</a>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+        <!-- Selected Chip Style (10% Opacity Primary BG + Full Primary Border) -->
+        <div class="bg-[#006038]/10 border-2 border-[#006038] p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer transition tactile-card">
+          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 text-2xl shadow-sm">🌾</div>
+          <span class="text-sm font-semibold text-[#006038]">Rice</span>
+        </div>
+
+        <div class="bg-[#f0eded] hover:bg-[#eae8e7] border border-[#e4e2e1] p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer transition">
+          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 text-2xl shadow-sm">🌽</div>
+          <span class="text-sm font-semibold text-[#1b1c1c]">Corn</span>
+        </div>
+
+        <div class="bg-[#f0eded] hover:bg-[#eae8e7] border border-[#e4e2e1] p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer transition">
+          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 text-2xl shadow-sm">🍇</div>
+          <span class="text-sm font-semibold text-[#1b1c1c]">Grapes</span>
+        </div>
+
+        <div class="bg-[#f0eded] hover:bg-[#eae8e7] border border-[#e4e2e1] p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer transition">
+          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 text-2xl shadow-sm">🥔</div>
+          <span class="text-sm font-semibold text-[#1b1c1c]">Potato</span>
+        </div>
+
+        <div class="bg-[#f0eded] hover:bg-[#eae8e7] border border-[#e4e2e1] p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer transition">
+          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 text-2xl shadow-sm">🫒</div>
+          <span class="text-sm font-semibold text-[#1b1c1c]">Olive</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- My Fields Overview Card -->
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-[#1b1c1c] font-headline">My Fields</h2>
+        <span class="text-xs font-semibold px-3 py-1 bg-[#f0eded] text-[#3f4941] rounded-full">
+          Central Valley
+        </span>
+      </div>
+
+      <div class="relative rounded-xl overflow-hidden h-72 shadow-md group">
+        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1200" alt="Wheat Field" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+
+        <div class="absolute top-4 right-4 bg-[#ffffff]/90 backdrop-blur-md border border-[#ffffff]/40 px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm">
+          <i data-lucide="sprout" class="w-4 h-4 text-[#006038]"></i>
+          <span class="text-xs font-bold text-[#1b1c1c]">7200 kg/ha</span>
+        </div>
+
+        <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between bg-[#ffffff]/95 backdrop-blur-md p-4 rounded-xl border border-[#ffffff]/50 shadow-md">
+          <div>
+            <h3 class="font-bold text-[#1b1c1c] font-headline">Golden Valley Field #4</h3>
+            <p class="text-xs text-[#3f4941]">Stage: Optimal Harvest Readiness</p>
+          </div>
+          <button class="bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] text-xs font-semibold px-5 py-2.5 rounded-full transition shadow-sm">
+            View Analytics
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    // Preserve original horizontal mouse wheel functionality
+    const scrollContainer = document.getElementById('cropScrollContainer');
+    scrollContainer.addEventListener('wheel', (evt) => {
+      evt.preventDefault();
+      scrollContainer.scrollLeft += evt.deltaY;
+    });
+  </script>
+</body>
+</html>

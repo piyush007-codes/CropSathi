@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CropSathi - My Fields</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' };</script>
   <!-- Google Fonts: Be Vietnam Pro & Noto Sans as specified in design.md -->
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="preferences.js"></script>
+
   <style>
     /* Typography Rules from design.md */
     body {
@@ -48,7 +51,7 @@
 <body class="bg-[#fbf9f8] text-[#1b1c1c] min-h-screen flex">
 
   <!-- Sidebar Navigation -->
-  <aside class="w-64 bg-[#f6f3f2] border-r border-[#e4e2e1] flex flex-col justify-between p-6 hidden md:flex fixed left-0 top-0 bottom-0 overflow-y-auto">
+  <aside class="w-64 bg-[#f6f3f2] border-r border-[#e4e2e1] flex flex-col justify-between p-6 hidden md:flex fixed left-0 top-0 bottom-0 overflow-y-auto z-30">
     <div>
       <!-- Brand Logo (Forest Green primary theme) -->
       <div class="flex items-center gap-3 mb-10">
@@ -62,19 +65,19 @@
       <nav class="space-y-2">
         <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
           <i data-lucide="layout-grid" class="w-5 h-5"></i>
-          Dashboard
+          <span data-i18n="nav_dashboard">Dashboard</span>
         </a>
         <a href="my-fields.html" class="flex items-center gap-3 px-4 py-3 bg-[#006038] text-[#ffffff] rounded-xl font-semibold transition shadow-sm">
           <i data-lucide="map-pin" class="w-5 h-5"></i>
-          My Fields
+          <span data-i18n="nav_my_fields">My Fields</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
           <i data-lucide="camera" class="w-5 h-5"></i>
-          Diagnose
+          <span data-i18n="nav_diagnose">Diagnose</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
           <i data-lucide="lightbulb" class="w-5 h-5"></i>
-          Advisory
+          <span data-i18n="nav_advisory">Advisory</span>
         </a>
       </nav>
     </div>
@@ -83,7 +86,7 @@
     <div class="pt-6 border-t border-[#e4e2e1]">
       <a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
         <i data-lucide="settings" class="w-5 h-5"></i>
-        Settings
+        <span data-i18n="nav_settings">Settings</span>
       </a>
     </div>
   </aside>
@@ -94,7 +97,7 @@
     <!-- Top Header -->
     <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-[#1b1c1c]">My Fields</h1>
+        <h1 class="text-3xl font-bold text-[#1b1c1c]" data-i18n="mf_title">My Fields</h1>
         <p class="text-[#3f4941] text-sm flex items-center gap-1 mt-1" id="locationDisplay">
           <i data-lucide="map-pin" class="w-4 h-4 text-[#933302]"></i> Loading location...
         </p>
@@ -103,15 +106,15 @@
       <div class="flex items-center gap-4">
         <div class="relative hidden sm:block">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#6f7a71]"></i>
-          <input type="text" placeholder="Search fields..." id="searchInput"
+          <input type="text" placeholder="Search fields..." id="searchInput" data-i18n-placeholder="mf_search_fields"
             class="bg-[#f0eded] text-sm pl-9 pr-4 py-2.5 rounded-full border border-transparent focus:border-[#006038] outline-none w-60 text-[#1b1c1c]">
         </div>
         <button class="w-11 h-11 bg-[#f0eded] hover:bg-[#eae8e7] rounded-full flex items-center justify-center relative transition">
           <i data-lucide="bell" class="w-5 h-5 text-[#1b1c1c]"></i>
           <span class="w-2.5 h-2.5 bg-[#933302] rounded-full absolute top-2 right-2 border-2 border-[#fbf9f8]"></span>
         </button>
-        <div class="w-11 h-11 rounded-full bg-[#f0eded] overflow-hidden border-2 border-[#ffffff] shadow-sm">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250" alt="Harris" class="w-full h-full object-cover">
+        <div id="mfProfilePhoto" class="w-11 h-11 rounded-full bg-[#f0eded] overflow-hidden border-2 border-[#ffffff] shadow-sm">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250" alt="Profile" class="w-full h-full object-cover">
         </div>
       </div>
     </header>
@@ -121,14 +124,14 @@
       <a href="add-field.html"
         class="inline-flex items-center gap-2 bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] font-semibold px-6 py-3 rounded-full transition shadow-sm">
         <i data-lucide="plus" class="w-5 h-5"></i>
-        Add New Field
+        <span data-i18n="mf_add_field">Add New Field</span>
       </a>
     </div>
 
     <!-- Loading State -->
     <div id="loadingState" class="text-center py-12">
       <div class="inline-block w-8 h-8 border-4 border-[#006038] border-t-transparent rounded-full animate-spin"></div>
-      <p class="mt-4 text-[#3f4941]">Loading your fields...</p>
+      <p class="mt-4 text-[#3f4941]" data-i18n="mf_loading">Loading your fields...</p>
     </div>
 
     <!-- Empty State -->
@@ -136,12 +139,12 @@
       <div class="w-20 h-20 bg-[#f0eded] rounded-full flex items-center justify-center mx-auto mb-4">
         <i data-lucide="map-pin" class="w-10 h-10 text-[#6f7a71]"></i>
       </div>
-      <h3 class="font-headline font-bold text-xl text-[#1b1c1c] mb-2">No fields yet</h3>
-      <p class="text-[#3f4941] mb-6">Add your first field to start tracking crop health and yield.</p>
+      <h3 class="font-headline font-bold text-xl text-[#1b1c1c] mb-2" data-i18n="mf_no_fields">No fields yet</h3>
+      <p class="text-[#3f4941] mb-6" data-i18n="mf_no_fields_desc">Add your first field to start tracking crop health and yield.</p>
       <a href="add-field.html"
         class="inline-flex items-center gap-2 bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] font-semibold px-6 py-3 rounded-full transition shadow-sm">
         <i data-lucide="plus" class="w-5 h-5"></i>
-        Add Your First Field
+        <span data-i18n="mf_add_first">Add Your First Field</span>
       </a>
     </div>
 
@@ -216,11 +219,11 @@
       <!-- Modal Footer -->
       <div class="p-5 border-t border-[#e4e2e1] flex justify-end gap-3">
         <button onclick="closeDetailModal()" class="px-5 py-2.5 text-sm font-semibold text-[#3f4941] bg-[#f0eded] hover:bg-[#eae8e7] rounded-full transition">
-          Close
+          <span data-i18n="fd_close">Close</span>
         </button>
         <button onclick="editField()" class="px-5 py-2.5 text-sm font-semibold text-white bg-[#006038] hover:bg-[#1a7a4c] rounded-full transition shadow-sm flex items-center gap-2">
           <i data-lucide="pencil" class="w-4 h-4"></i>
-          Edit Field
+          <span data-i18n="fd_edit">Edit Field</span>
         </button>
       </div>
     </div>
@@ -261,22 +264,35 @@
     async function loadData() {
       try {
         // Load user profile for location
-        const profileResponse = await fetch('http://localhost:5000/api/user/profile', {
+        const profileResponse = await fetch(`${CropSathiPrefs.api}/api/user/profile`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const profileData = await profileResponse.json();
 
-        if (profileData.success && profileData.user.farmDetails) {
-          const { village, district } = profileData.user.farmDetails;
-          const locationText = village || district || 'Location not set';
-          document.getElementById('locationDisplay').innerHTML = `
-            <i data-lucide="map-pin" class="w-4 h-4 text-[#933302]"></i> ${locationText}
-          `;
-          lucide.createIcons();
+        if (profileData.success) {
+          // Update profile photo
+          const photo = profileData.user.profilePhoto;
+          if (photo) {
+            localStorage.setItem('cropsathi_profile_photo', photo);
+            const avatarContainer = document.getElementById('mfProfilePhoto');
+            if (avatarContainer) {
+              const existingImg = avatarContainer.querySelector('img');
+              if (existingImg) existingImg.src = photo;
+            }
+          }
+
+          if (profileData.user.farmDetails) {
+            const { village, district } = profileData.user.farmDetails;
+            const locationText = village || district || 'Location not set';
+            document.getElementById('locationDisplay').innerHTML = `
+              <i data-lucide="map-pin" class="w-4 h-4 text-[#933302]"></i> ${locationText}
+            `;
+            lucide.createIcons();
+          }
         }
 
         // Load fields
-        const fieldsResponse = await fetch('http://localhost:5000/api/fields', {
+        const fieldsResponse = await fetch(`${CropSathiPrefs.api}/api/fields`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const fieldsData = await fieldsResponse.json();
@@ -323,9 +339,9 @@
 
             <!-- Crop Info Overlay -->
             <div class="absolute bottom-3 left-3 right-3">
-              <h3 class="font-bold text-[#ffffff] font-headline text-lg">${field.name}</h3>
+              <h3 class="font-bold text-[#ffffff] font-headline text-lg">${CropSathiPrefs.escapeHtml(field.name)}</h3>
               <p class="text-xs text-[#ffffff]/90 flex items-center gap-1 mt-0.5">
-                <span class="text-base">${cropEmojis[field.cropType] || '🌱'}</span> ${field.cropType} · ${field.areaInHectares.toFixed(1)} hectares
+                <span class="text-base">${cropEmojis[field.cropType] || '🌱'}</span> ${CropSathiPrefs.escapeHtml(field.cropType)} · ${field.areaInHectares.toFixed(1)} hectares
               </p>
             </div>
           </div>
@@ -344,7 +360,7 @@
               </div>
               <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
                 <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Crop Type</p>
-                <p class="text-sm font-semibold text-[#1b1c1c] mt-0.5">${field.cropType}</p>
+                <p class="text-sm font-semibold text-[#1b1c1c] mt-0.5">${CropSathiPrefs.escapeHtml(field.cropType)}</p>
               </div>
               <div class="bg-[#f0eded] p-3 rounded-lg border border-[#e4e2e1]">
                 <p class="text-[10px] font-semibold text-[#3f4941] uppercase tracking-wide">Sowing Date</p>
@@ -355,7 +371,7 @@
             <!-- Action Buttons -->
             <div class="flex gap-2">
               <button onclick="viewField('${field._id}')" class="flex-1 bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] text-sm font-semibold px-4 py-2.5 rounded-full transition">
-                View Details
+                ${CropSathiPrefs.t('mf_view_details')}
               </button>
               <button onclick="deleteField('${field._id}', '${field.name}')" class="w-10 h-10 bg-[#f0eded] hover:bg-red-50 rounded-full flex items-center justify-center transition" title="Delete field">
                 <i data-lucide="trash-2" class="w-4 h-4 text-[#933302]"></i>
@@ -470,7 +486,8 @@
 
     // Close detail modal
     function closeDetailModal(event) {
-      if (event && event.target.id !== 'fieldDetailModal') return;
+      // Only close when clicking the backdrop itself (not child elements)
+      if (event && event.target !== event.currentTarget) return;
       document.getElementById('fieldDetailModal').classList.add('hidden');
       document.body.style.overflow = 'auto';
       if (detailMap) {
@@ -486,7 +503,7 @@
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/api/fields/${fieldId}`, {
+        const response = await fetch(`${CropSathiPrefs.api}/api/fields/${fieldId}`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -515,6 +532,16 @@
       );
       renderFields(filtered);
     });
+
+    // Load cached profile photo immediately
+    const cachedPhoto = localStorage.getItem('cropsathi_profile_photo');
+    if (cachedPhoto) {
+      const avatarContainer = document.getElementById('mfProfilePhoto');
+      if (avatarContainer) {
+        const existingImg = avatarContainer.querySelector('img');
+        if (existingImg) existingImg.src = cachedPhoto;
+      }
+    }
 
     // Load data on page load
     loadData();

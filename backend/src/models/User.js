@@ -30,8 +30,13 @@ const userSchema = new mongoose.Schema(
     },
     preferredLanguage: {
       type: String,
-      enum: ['en', 'hi', 'mr', 'gu', 'ta', 'te', 'kn', 'pa', 'bn'],
+      enum: ['en', 'hi', 'mr', 'gu', 'ta', 'te', 'kn', 'pa', 'bn', 'or', 'as', 'ur', 'ml'],
       default: 'en',
+    },
+    profilePhoto: {
+      type: String,
+      default: '',
+      maxlength: [2000000, 'Profile photo too large (max 500KB)'],
     },
     farmDetails: {
       state: { type: String, default: '' },

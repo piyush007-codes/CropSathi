@@ -90,9 +90,18 @@ export const getField = async (req, res) => {
 // @access  Private
 export const updateField = async (req, res) => {
   try {
+    // Whitelist allowed fields to prevent mass assignment
+    const allowedFields = ['name', 'cropType', 'sowingDate', 'polygon', 'areaInHectares', 'areaInAcres'];
+    const updates = {};
+    for (const key of allowedFields) {
+      if (req.body[key] !== undefined) {
+        updates[key] = req.body[key];
+      }
+    }
+
     const field = await Field.findOneAndUpdate(
       { _id: req.params.id, userId: req.user.id },
-      req.body,
+      updates,
       { new: true, runValidators: true }
     );
 

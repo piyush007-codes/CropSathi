@@ -13,10 +13,34 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Middleware — restrict CORS
+// In production, set CORS_ORIGIN env var to your frontend domain (e.g. "https://cropsathi.vercel.app")
+// In development, allow all localhost origins
+const isDev = process.env.NODE_ENV !== 'production';
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',')
+  : [];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, server-to-server, same-origin)
+    if (!origin) return callback(null, true);
+    // In development, allow all localhost/127.0.0.1 origins
+    if (isDev && /^https?:\/\/localhost(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
+    if (isDev && /^https?:\/\/127\.0\.0\.1(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
+    // In production, check against the whitelist
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error('Not allowed by CORS'));
+  },
+}));
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ limit: '5mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Mount API Routes
@@ -27,6 +51,8 @@ app.use('/api/fields', fieldRoutes);
 app.get('/api/test', (req, res) => {
   res.json({ message: 'CropSathi backend is fully connected!' });
 });
+
+// User profile — moved here but should live in auth routes
 app.get('/api/user/profile', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -39,6 +65,7 @@ app.get('/api/user/profile', protect, async (req, res) => {
         name: user.name,
         phoneNumber: user.phoneNumber,
         farmDetails: user.farmDetails,
+        profilePhoto: user.profilePhoto || '',
       }
     });
   } catch (error) {

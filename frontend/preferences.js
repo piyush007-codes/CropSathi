@@ -7,11 +7,14 @@ const CropSathiPrefs = (() => {
   const STORAGE_KEY = 'cropsathi_prefs';
   const DEFAULTS = { language: 'en', units: 'metric_ha', theme: 'light' };
 
+<<<<<<< HEAD
   // API base URL — override via window.CROPSATHI_API_URL or defaults to localhost
   const API_BASE_URL = (typeof window !== 'undefined' && window.CROPSATHI_API_URL)
     ? window.CROPSATHI_API_URL
     : 'http://localhost:5000';
 
+=======
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
   // ========================================================
   // TRANSLATION MAPS  (en / hi / mr / bn / te / ta / gu / kn / ml / or / pa / as / ur)
   // ========================================================
@@ -313,6 +316,7 @@ const CropSathiPrefs = (() => {
   }
 
   // ========================================================
+<<<<<<< HEAD
   // HTML ESCAPING (XSS prevention)
   // ========================================================
   function escapeHtml(str) {
@@ -323,6 +327,8 @@ const CropSathiPrefs = (() => {
   }
 
   // ========================================================
+=======
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
   // PUBLIC API
   // ========================================================
   return {
@@ -336,8 +342,11 @@ const CropSathiPrefs = (() => {
     getAreaLabel,
     getWeightLabel,
     init,
+<<<<<<< HEAD
     api: API_BASE_URL,
     escapeHtml,
+=======
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
   };
 })();
 

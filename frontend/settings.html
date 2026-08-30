@@ -10,7 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+<<<<<<< HEAD
   <script src="preferences.js"></script>
+=======
+<script src="preferences.js"></script>
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
 
   <style>
     body {
@@ -108,11 +112,19 @@
           
           <!-- Profile Image Avatar with Initial Hook & Aligned Edit Button -->
           <div class="flex flex-col items-center justify-center p-4 border-r-0 md:border-r border-[#e4e2e1] h-full">
+<<<<<<< HEAD
             <div id="headerProfilePhoto" class="w-24 h-24 rounded-full bg-[#eae8e7] flex items-center justify-center border-2 border-[#006038]/20 shadow-sm overflow-hidden">
               <span id="userAvatarInitial" class="font-headline text-2xl font-bold text-[#006038]">R</span>
             </div>
             
             <button onclick="pendingPhotoBase64 = null; removePhotoFlag = false; document.getElementById('profilePhotoInput').value = ''; document.getElementById('edit-profile-modal').classList.remove('hidden')"
+=======
+            <div class="w-24 h-24 rounded-full bg-[#eae8e7] flex items-center justify-center border-2 border-[#006038]/20 shadow-sm">
+              <span id="userAvatarInitial" class="font-headline text-2xl font-bold text-[#006038]">R</span>
+            </div>
+            
+            <button onclick="document.getElementById('edit-profile-modal').classList.remove('hidden')"
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
                     class="mt-4 w-full max-w-[180px] flex items-center justify-center gap-2 px-4 py-2 bg-[#006038] text-[#ffffff] text-sm font-semibold rounded-xl transition hover:bg-[#1a7a4c] shadow-sm">
               <i data-lucide="user-cog" class="w-4 h-4"></i>
               <span data-i18n="settings_edit_profile">Edit Profile</span>
@@ -361,6 +373,7 @@
           <div id="modalProfilePhoto" class="w-20 h-20 rounded-full bg-[#eae8e7] flex items-center justify-center border border-[#e4e2e1] overflow-hidden">
             <span id="modalAvatarInitial" class="font-headline text-2xl font-bold text-[#006038]">R</span>
           </div>
+<<<<<<< HEAD
           <div class="flex items-center gap-4 mt-1">
             <label class="cursor-pointer text-sm font-semibold text-[#006038] hover:underline flex items-center gap-1.5">
               <i data-lucide="upload" class="w-4 h-4"></i>
@@ -372,6 +385,13 @@
               <span>Delete</span>
             </button>
           </div>
+=======
+          <label class="cursor-pointer text-sm font-semibold text-[#006038] hover:underline flex items-center gap-1.5 mt-1">
+            <i data-lucide="upload" class="w-4 h-4"></i>
+            <span data-i18n="settings_upload_photo">Upload New Photo</span>
+            <input type="file" class="hidden" accept="image/*" />
+          </label>
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
         </div>
 
         <div class="flex flex-col gap-1">
@@ -637,23 +657,39 @@
       const confirmPassword = document.getElementById('confirmPassword').value;
 
       if (newPassword !== confirmPassword) {
+<<<<<<< HEAD
         errBanner.textContent = CropSathiPrefs.t('cp_new') + ' ' + CropSathiPrefs.t('cp_confirm_placeholder');
+=======
+        errBanner.textContent = 'New passwords do not match.';
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
         errBanner.classList.remove('hidden');
         return;
       }
 
       if (newPassword.length < 6) {
+<<<<<<< HEAD
         errBanner.textContent = CropSathiPrefs.t('cp_hint');
+=======
+        errBanner.textContent = 'New password must be at least 6 characters.';
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
         errBanner.classList.remove('hidden');
         return;
       }
 
       saveBtn.disabled = true;
+<<<<<<< HEAD
       saveBtn.innerHTML = '<span>' + CropSathiPrefs.t('settings_save_changes') + '...</span>';
 
       try {
         const token = localStorage.getItem('token');
         const res = await fetch(`${CropSathiPrefs.api}/api/auth/change-password`, {
+=======
+      saveBtn.textContent = 'Saving...';
+
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('http://localhost:5000/api/auth/change-password', {
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -664,7 +700,11 @@
         const data = await res.json();
 
         if (data.success) {
+<<<<<<< HEAD
           successBanner.textContent = CropSathiPrefs.t('cp_save') + '!';
+=======
+          successBanner.textContent = 'Password updated successfully!';
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
           successBanner.classList.remove('hidden');
           document.getElementById('changePasswordForm').reset();
           setTimeout(() => {
@@ -681,6 +721,7 @@
       }
 
       saveBtn.disabled = false;
+<<<<<<< HEAD
       saveBtn.innerHTML = '<span data-i18n="settings_save_changes">' + CropSathiPrefs.t('settings_save_changes') + '</span>';
     });
 
@@ -844,6 +885,11 @@
       applyProfilePhoto(cachedPhoto);
     }
 
+=======
+      saveBtn.textContent = 'Save Changes';
+    });
+
+>>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
     document.addEventListener('DOMContentLoaded', syncSettingsProfile);
   </script>
 </body>

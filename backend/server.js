@@ -51,6 +51,10 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+const fieldRoutes = require('./src/routes/fieldRoutes'); // Adjust relative path as needed
+
+// Mount routes
+app.use('/api/fields', fieldRoutes);
 
 const PORT = process.env.PORT || 5000;
 

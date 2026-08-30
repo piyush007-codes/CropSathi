@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CropSathi - My Fields</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' };</script>
   <!-- Google Fonts: Be Vietnam Pro & Noto Sans as specified in design.md -->
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="preferences.js"></script>
+
   <style>
     /* Typography Rules from design.md */
     body {
@@ -62,19 +65,19 @@
       <nav class="space-y-2">
         <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
           <i data-lucide="layout-grid" class="w-5 h-5"></i>
-          Dashboard
+          <span data-i18n="nav_dashboard">Dashboard</span>
         </a>
         <a href="my-fields.html" class="flex items-center gap-3 px-4 py-3 bg-[#006038] text-[#ffffff] rounded-xl font-semibold transition shadow-sm">
           <i data-lucide="map-pin" class="w-5 h-5"></i>
-          My Fields
+          <span data-i18n="nav_my_fields">My Fields</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
           <i data-lucide="camera" class="w-5 h-5"></i>
-          Diagnose
+          <span data-i18n="nav_diagnose">Diagnose</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
           <i data-lucide="lightbulb" class="w-5 h-5"></i>
-          Advisory
+          <span data-i18n="nav_advisory">Advisory</span>
         </a>
       </nav>
     </div>
@@ -83,7 +86,7 @@
     <div class="pt-6 border-t border-[#e4e2e1]">
       <a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
         <i data-lucide="settings" class="w-5 h-5"></i>
-        Settings
+        <span data-i18n="nav_settings">Settings</span>
       </a>
     </div>
   </aside>
@@ -94,7 +97,7 @@
     <!-- Top Header -->
     <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-[#1b1c1c]">My Fields</h1>
+        <h1 class="text-3xl font-bold text-[#1b1c1c]" data-i18n="mf_title">My Fields</h1>
         <p class="text-[#3f4941] text-sm flex items-center gap-1 mt-1" id="locationDisplay">
           <i data-lucide="map-pin" class="w-4 h-4 text-[#933302]"></i> Loading location...
         </p>
@@ -103,7 +106,7 @@
       <div class="flex items-center gap-4">
         <div class="relative hidden sm:block">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#6f7a71]"></i>
-          <input type="text" placeholder="Search fields..." id="searchInput"
+          <input type="text" placeholder="Search fields..." id="searchInput" data-i18n-placeholder="mf_search_fields"
             class="bg-[#f0eded] text-sm pl-9 pr-4 py-2.5 rounded-full border border-transparent focus:border-[#006038] outline-none w-60 text-[#1b1c1c]">
         </div>
         <button class="w-11 h-11 bg-[#f0eded] hover:bg-[#eae8e7] rounded-full flex items-center justify-center relative transition">
@@ -121,14 +124,14 @@
       <a href="add-field.html"
         class="inline-flex items-center gap-2 bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] font-semibold px-6 py-3 rounded-full transition shadow-sm">
         <i data-lucide="plus" class="w-5 h-5"></i>
-        Add New Field
+        <span data-i18n="mf_add_field">Add New Field</span>
       </a>
     </div>
 
     <!-- Loading State -->
     <div id="loadingState" class="text-center py-12">
       <div class="inline-block w-8 h-8 border-4 border-[#006038] border-t-transparent rounded-full animate-spin"></div>
-      <p class="mt-4 text-[#3f4941]">Loading your fields...</p>
+      <p class="mt-4 text-[#3f4941]" data-i18n="mf_loading">Loading your fields...</p>
     </div>
 
     <!-- Empty State -->
@@ -136,12 +139,12 @@
       <div class="w-20 h-20 bg-[#f0eded] rounded-full flex items-center justify-center mx-auto mb-4">
         <i data-lucide="map-pin" class="w-10 h-10 text-[#6f7a71]"></i>
       </div>
-      <h3 class="font-headline font-bold text-xl text-[#1b1c1c] mb-2">No fields yet</h3>
-      <p class="text-[#3f4941] mb-6">Add your first field to start tracking crop health and yield.</p>
+      <h3 class="font-headline font-bold text-xl text-[#1b1c1c] mb-2" data-i18n="mf_no_fields">No fields yet</h3>
+      <p class="text-[#3f4941] mb-6" data-i18n="mf_no_fields_desc">Add your first field to start tracking crop health and yield.</p>
       <a href="add-field.html"
         class="inline-flex items-center gap-2 bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] font-semibold px-6 py-3 rounded-full transition shadow-sm">
         <i data-lucide="plus" class="w-5 h-5"></i>
-        Add Your First Field
+        <span data-i18n="mf_add_first">Add Your First Field</span>
       </a>
     </div>
 
@@ -216,11 +219,11 @@
       <!-- Modal Footer -->
       <div class="p-5 border-t border-[#e4e2e1] flex justify-end gap-3">
         <button onclick="closeDetailModal()" class="px-5 py-2.5 text-sm font-semibold text-[#3f4941] bg-[#f0eded] hover:bg-[#eae8e7] rounded-full transition">
-          Close
+          <span data-i18n="fd_close">Close</span>
         </button>
         <button onclick="editField()" class="px-5 py-2.5 text-sm font-semibold text-white bg-[#006038] hover:bg-[#1a7a4c] rounded-full transition shadow-sm flex items-center gap-2">
           <i data-lucide="pencil" class="w-4 h-4"></i>
-          Edit Field
+          <span data-i18n="fd_edit">Edit Field</span>
         </button>
       </div>
     </div>
@@ -355,7 +358,7 @@
             <!-- Action Buttons -->
             <div class="flex gap-2">
               <button onclick="viewField('${field._id}')" class="flex-1 bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] text-sm font-semibold px-4 py-2.5 rounded-full transition">
-                View Details
+                ${CropSathiPrefs.t('mf_view_details')}
               </button>
               <button onclick="deleteField('${field._id}', '${field.name}')" class="w-10 h-10 bg-[#f0eded] hover:bg-red-50 rounded-full flex items-center justify-center transition" title="Delete field">
                 <i data-lucide="trash-2" class="w-4 h-4 text-[#933302]"></i>

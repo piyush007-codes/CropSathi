@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CropSathi - Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' };</script>
   <!-- Google Fonts: Be Vietnam Pro & Noto Sans -->
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
+<script src="preferences.js"></script>
+
 
   <script>
     async function testBackendConnection() {
@@ -120,19 +123,19 @@
       <nav class="space-y-2">
         <a href="#" class="flex items-center gap-3 px-4 py-3 bg-[#006038] text-[#ffffff] rounded-xl font-semibold transition shadow-sm">
           <i data-lucide="layout-grid" class="w-5 h-5"></i>
-          Dashboard
+          <span data-i18n="nav_dashboard">Dashboard</span>
         </a>
         <a href="my-fields.html" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
           <i data-lucide="map-pin" class="w-5 h-5"></i>
-          My Fields
+          <span data-i18n="nav_my_fields">My Fields</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
           <i data-lucide="camera" class="w-5 h-5"></i>
-          Diagnose
+          <span data-i18n="nav_diagnose">Diagnose</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
           <i data-lucide="lightbulb" class="w-5 h-5"></i>
-          Advisory
+          <span data-i18n="nav_advisory">Advisory</span>
         </a>
       </nav>
     </div>
@@ -140,7 +143,7 @@
     <div class="pt-6 border-t border-[#e4e2e1]">
       <a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-[#3f4941] hover:bg-[#eae8e7] rounded-xl font-medium transition">
         <i data-lucide="settings" class="w-5 h-5"></i>
-        Settings
+        <span data-i18n="nav_settings">Settings</span>
       </a>
     </div>
   </aside>
@@ -151,7 +154,7 @@
     <!-- Top Header -->
     <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-[#1b1c1c]">Hello, <span id="userName">Harris</span></h1>
+        <h1 class="text-3xl font-bold text-[#1b1c1c]" data-i18n="dash_hello">Hello, <span id="userName">Harris</span></h1>
         <p class="text-[#3f4941] text-sm flex items-center gap-1 mt-1">
           <i data-lucide="map-pin" class="w-4 h-4 text-[#933302]"></i> <span id="userLocation">Central Valley</span>
         </p>
@@ -182,7 +185,7 @@
           <!-- Left Info Content -->
           <div class="relative z-10 flex flex-col justify-between items-start">
             <div>
-              <span class="text-[#3f4941] font-medium text-sm tracking-wide">Current Temperature</span>
+              <span class="text-[#3f4941] font-medium text-sm tracking-wide" data-i18n="dash_current_temp">Current Temperature</span>
               <div class="flex items-baseline gap-1 mt-1">
                 <span id="tempValue" class="text-5xl font-extrabold text-[#1b1c1c] font-headline tracking-tight">32°</span>
                 <span class="text-xl font-semibold text-[#3f4941]">C</span>
@@ -203,7 +206,7 @@
           <!-- Soil Temp -->
           <div class="bg-[#f6f3f2] p-4 rounded-xl border border-[#e4e2e1] flex items-center justify-between shadow-sm transition-all hover:bg-[#f0eded]">
             <div>
-              <p class="text-xs font-semibold text-[#3f4941]">Soil temp</p>
+              <p class="text-xs font-semibold text-[#3f4941]" data-i18n="dash_soil_temp">Soil temp</p>
               <p class="text-lg font-bold text-[#1b1c1c] mt-0.5" id="soilTempValue">+23°C</p>
             </div>
             <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-[#933302] border border-[#e4e2e1] shadow-sm">
@@ -214,7 +217,7 @@
           <!-- Humidity -->
           <div class="bg-[#f6f3f2] p-4 rounded-xl border border-[#e4e2e1] flex items-center justify-between shadow-sm transition-all hover:bg-[#f0eded]">
             <div>
-              <p class="text-xs font-semibold text-[#3f4941]">Humidity</p>
+              <p class="text-xs font-semibold text-[#3f4941]" data-i18n="dash_humidity">Humidity</p>
               <p class="text-lg font-bold text-[#1b1c1c] mt-0.5" id="humidityValue">78%</p>
             </div>
             <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-[#006038] border border-[#e4e2e1] shadow-sm">
@@ -225,7 +228,7 @@
           <!-- Wind -->
           <div class="bg-[#f6f3f2] p-4 rounded-xl border border-[#e4e2e1] flex items-center justify-between shadow-sm transition-all hover:bg-[#f0eded]">
             <div>
-              <p class="text-xs font-semibold text-[#3f4941]">Wind</p>
+              <p class="text-xs font-semibold text-[#3f4941]" data-i18n="dash_wind">Wind</p>
               <p class="text-lg font-bold text-[#1b1c1c] mt-0.5" id="windValue">7 m/s</p>
             </div>
             <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-[#006038] border border-[#e4e2e1] shadow-sm">
@@ -236,7 +239,7 @@
           <!-- Precipitation -->
           <div class="bg-[#f6f3f2] p-4 rounded-xl border border-[#e4e2e1] flex items-center justify-between shadow-sm transition-all hover:bg-[#f0eded]">
             <div>
-              <p class="text-xs font-semibold text-[#3f4941]">Precipitation</p>
+              <p class="text-xs font-semibold text-[#3f4941]" data-i18n="dash_precipitation">Precipitation</p>
               <p class="text-lg font-bold text-[#1b1c1c] mt-0.5" id="precipValue">0 mm</p>
             </div>
             <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-[#933302] border border-[#e4e2e1] shadow-sm">
@@ -250,11 +253,11 @@
       <div class="lg:col-span-7 bg-[#f6f3f2] border border-[#e4e2e1] p-6 rounded-xl flex flex-col justify-between tactile-card h-full">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h2 class="text-lg font-bold text-[#1b1c1c] font-headline">Field Health Score</h2>
-            <p class="text-xs text-[#3f4941]">Real-time composite telemetry gauge score</p>
+            <h2 class="text-lg font-bold text-[#1b1c1c] font-headline" data-i18n="dash_field_health">Field Health Score</h2>
+            <p class="text-xs text-[#3f4941]" data-i18n="dash_field_health_sub">Real-time composite telemetry gauge score</p>
           </div>
           <span class="text-xs font-bold px-3 py-1 bg-[#006038] text-[#ffffff] rounded-full flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-[#abffc9] animate-pulse"></span> Sentinel Sync
+            <span class="w-2 h-2 rounded-full bg-[#abffc9] animate-pulse"></span>            <span data-i18n="dash_sentinel_sync">Sentinel Sync</span>
           </span>
         </div>
 
@@ -285,13 +288,13 @@
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
                 <span class="text-3xl font-extrabold text-[#1b1c1c] font-headline leading-none">92</span>
-                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1">AVG SCORE</span>
+                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1" data-i18n="dash_avg_score">AVG SCORE</span>
               </div>
             </div>
 
             <div class="w-full pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
-              <span class="text-[#3f4941]">Action:</span>
-              <span class="font-semibold text-[#006038]">No Action Needed</span>
+              <span class="text-[#3f4941]" data-i18n="dash_action">Action:</span>
+              <span class="font-semibold text-[#006038]" data-i18n="dash_no_action">No Action Needed</span>
             </div>
           </div>
 
@@ -319,13 +322,13 @@
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
                 <span class="text-3xl font-extrabold text-[#1b1c1c] font-headline leading-none">78</span>
-                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1">AVG SCORE</span>
+                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1" data-i18n="dash_avg_score">AVG SCORE</span>
               </div>
             </div>
 
             <div class="w-full pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
-              <span class="text-[#3f4941]">Action:</span>
-              <span class="font-semibold text-[#1b1c1c]">Irrigate in 48h</span>
+              <span class="text-[#3f4941]" data-i18n="dash_action">Action:</span>
+              <span class="font-semibold text-[#1b1c1c]" data-i18n="dash_irigate_48h">Irrigate in 48h</span>
             </div>
           </div>
 
@@ -353,13 +356,13 @@
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
                 <span class="text-3xl font-extrabold text-[#1b1c1c] font-headline leading-none">95</span>
-                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1">AVG SCORE</span>
+                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1" data-i18n="dash_avg_score">AVG SCORE</span>
               </div>
             </div>
 
             <div class="w-full pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
-              <span class="text-[#3f4941]">Action:</span>
-              <span class="font-semibold text-[#006038]">Canopy Pruning</span>
+              <span class="text-[#3f4941]" data-i18n="dash_action">Action:</span>
+              <span class="font-semibold text-[#006038]" data-i18n="dash_canopy_pruning">Canopy Pruning</span>
             </div>
           </div>
 
@@ -390,13 +393,13 @@
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
                 <span class="text-3xl font-extrabold text-[#1b1c1c] font-headline leading-none">61</span>
-                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1">AVG SCORE</span>
+                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1" data-i18n="dash_avg_score">AVG SCORE</span>
               </div>
             </div>
 
             <div class="w-full pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
-              <span class="text-[#3f4941]">Action:</span>
-              <span class="font-bold text-[#933302]">Needs Irrigation</span>
+              <span class="text-[#3f4941]" data-i18n="dash_action">Action:</span>
+              <span class="font-bold text-[#933302]" data-i18n="dash_needs_irrigation">Needs Irrigation</span>
             </div>
           </div>
 
@@ -407,8 +410,8 @@
     <!-- Commodities & Food Selector -->
     <section class="mb-8">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-bold text-[#1b1c1c] font-headline">Commodities & Food</h2>
-        <a href="#" class="text-xs font-semibold text-[#006038] hover:underline">View All</a>
+        <h2 class="text-lg font-bold text-[#1b1c1c] font-headline" data-i18n="dash_commodities">Commodities & Food</h2>
+        <a href="#" class="text-xs font-semibold text-[#006038] hover:underline"><span data-i18n="dash_view_all">View All</span></a>
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
@@ -442,7 +445,7 @@
     <!-- My Fields Overview Card -->
     <section>
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-bold text-[#1b1c1c] font-headline">My Fields</h2>
+        <h2 class="text-lg font-bold text-[#1b1c1c] font-headline" data-i18n="dash_my_fields">My Fields</h2>
         <span class="text-xs font-semibold px-3 py-1 bg-[#f0eded] text-[#3f4941] rounded-full">
           Central Valley
         </span>
@@ -463,7 +466,7 @@
             <p class="text-xs text-[#3f4941]">Stage: Optimal Harvest Readiness</p>
           </div>
           <button class="bg-[#006038] hover:bg-[#1a7a4c] text-[#ffffff] text-xs font-semibold px-5 py-2.5 rounded-full transition shadow-sm">
-            View Analytics
+            <span data-i18n="dash_view_analytics">View Analytics</span>
           </button>
         </div>
       </div>

@@ -42,11 +42,46 @@
             const district = user.farmDetails.district || '';
             locationElem.textContent = village || district || 'Location not set';
           }
+
+          // Fetch real weather data if GPS coordinates exist
+          if (user.farmDetails && user.farmDetails.latitude && user.farmDetails.longitude) {
+            fetchWeatherData(user.farmDetails.latitude, user.farmDetails.longitude);
+          }
         }
       } catch (error) {
         console.error('Failed to sync user data:', error);
       }
     }
+
+    async function fetchWeatherData(lat, lng) {
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,rain,soil_temperature_6cm,wind_speed_10m&timezone=auto`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data && data.current) {
+          const current = data.current;
+
+          // Update temperature card
+          const temp = Math.round(current.temperature_2m);
+          updateWeatherVisual(temp);
+
+          // Update metric cards
+          const soilTemp = document.getElementById('soilTempValue');
+          const humidity = document.getElementById('humidityValue');
+          const wind = document.getElementById('windValue');
+          const precip = document.getElementById('precipValue');
+
+          if (soilTemp) soilTemp.textContent = (current.soil_temperature_6cm != null ? Math.round(current.soil_temperature_6cm) : 23) + '°C';
+          if (humidity) humidity.textContent = (current.relative_humidity_2m != null ? Math.round(current.relative_humidity_2m) : 78) + '%';
+          if (wind) wind.textContent = (current.wind_speed_10m != null ? Math.round(current.wind_speed_10m) : 7) + ' m/s';
+          if (precip) precip.textContent = (current.rain != null ? current.rain.toFixed(1) : 0) + ' mm';
+        }
+      } catch (error) {
+        console.error('Weather fetch failed, using defaults:', error);
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', syncUserProfile);
   </script>
   <style>
@@ -73,7 +108,7 @@
 <body class="bg-[#fbf9f8] text-[#1b1c1c] min-h-screen flex">
 
   <!-- Sidebar Navigation -->
-  <aside class="w-64 bg-[#f6f3f2] border-r border-[#e4e2e1] flex flex-col justify-between p-6 hidden md:flex fixed left-0 top-0 bottom-0 overflow-y-auto">
+  <aside class="w-64 bg-[#f6f3f2] border-r border-[#e4e2e1] flex flex-col justify-between p-6 hidden md:flex fixed left-0 top-0 bottom-0 overflow-y-auto z-30">
     <div>
       <div class="flex items-center gap-3 mb-10">
         <div class="w-10 h-10 rounded-full bg-[#006038] flex items-center justify-center text-[#ffffff] font-bold shadow-md">
@@ -138,12 +173,12 @@
     </header>
 
     <!-- Weather & Field Health Section -->
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8 items-stretch">
       
       <!-- LEFT COLUMN: Weather Card & Metrics -->
-      <div class="lg:col-span-5 flex flex-col gap-3 font-sans">
+      <div class="lg:col-span-5 flex flex-col justify-between h-full gap-3 font-sans">
         <!-- Main Weather Card -->
-        <div id="weatherCardBg" class="bg-[#f7f5f4] border border-[#e4e2e1] p-6 rounded-2xl relative overflow-hidden tactile-card flex justify-between min-h-[170px]">
+        <div id="weatherCardBg" class="bg-[#f7f5f4] border border-[#e4e2e1] p-6 rounded-2xl relative overflow-hidden tactile-card flex justify-between min-h-[170px] flex-1">
           <!-- Left Info Content -->
           <div class="relative z-10 flex flex-col justify-between items-start">
             <div>
@@ -169,7 +204,7 @@
           <div class="bg-[#f6f3f2] p-4 rounded-xl border border-[#e4e2e1] flex items-center justify-between shadow-sm transition-all hover:bg-[#f0eded]">
             <div>
               <p class="text-xs font-semibold text-[#3f4941]">Soil temp</p>
-              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5">+23°C</p>
+              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5" id="soilTempValue">+23°C</p>
             </div>
             <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-[#933302] border border-[#e4e2e1] shadow-sm">
               <i data-lucide="thermometer" class="w-4 h-4"></i>
@@ -180,7 +215,7 @@
           <div class="bg-[#f6f3f2] p-4 rounded-xl border border-[#e4e2e1] flex items-center justify-between shadow-sm transition-all hover:bg-[#f0eded]">
             <div>
               <p class="text-xs font-semibold text-[#3f4941]">Humidity</p>
-              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5">78%</p>
+              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5" id="humidityValue">78%</p>
             </div>
             <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-[#006038] border border-[#e4e2e1] shadow-sm">
               <i data-lucide="droplets" class="w-4 h-4"></i>
@@ -191,7 +226,7 @@
           <div class="bg-[#f6f3f2] p-4 rounded-xl border border-[#e4e2e1] flex items-center justify-between shadow-sm transition-all hover:bg-[#f0eded]">
             <div>
               <p class="text-xs font-semibold text-[#3f4941]">Wind</p>
-              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5">7 m/s</p>
+              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5" id="windValue">7 m/s</p>
             </div>
             <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-[#006038] border border-[#e4e2e1] shadow-sm">
               <i data-lucide="wind" class="w-4 h-4"></i>
@@ -202,7 +237,7 @@
           <div class="bg-[#f6f3f2] p-4 rounded-xl border border-[#e4e2e1] flex items-center justify-between shadow-sm transition-all hover:bg-[#f0eded]">
             <div>
               <p class="text-xs font-semibold text-[#3f4941]">Precipitation</p>
-              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5">0 mm</p>
+              <p class="text-lg font-bold text-[#1b1c1c] mt-0.5" id="precipValue">0 mm</p>
             </div>
             <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-[#933302] border border-[#e4e2e1] shadow-sm">
               <i data-lucide="cloud-rain" class="w-4 h-4"></i>
@@ -212,7 +247,7 @@
       </div>
 
       <!-- RIGHT COLUMN: Dial Gauge Cards -->
-      <div class="lg:col-span-7 bg-[#f6f3f2] border border-[#e4e2e1] p-6 rounded-xl flex flex-col justify-between tactile-card">
+      <div class="lg:col-span-7 bg-[#f6f3f2] border border-[#e4e2e1] p-6 rounded-xl flex flex-col justify-between tactile-card h-full">
         <div class="flex items-center justify-between mb-4">
           <div>
             <h2 class="text-lg font-bold text-[#1b1c1c] font-headline">Field Health Score</h2>
@@ -466,7 +501,7 @@
         if (badge) badge.className = 'inline-flex items-center gap-2 bg-[#e8f0f7] px-3.5 py-1.5 rounded-full border border-[#2b6cb0]/10 text-xs font-semibold text-[#2b6cb0] mt-4 shadow-sm';
         if (badgeText) badgeText.textContent = 'Cool / Frost Risk Weather';
 
-        svgHTML = '<svg class="w-full h-full text-right" viewBox="0 0 200 120" preserveAspectRatio="xMaxYMax meet" fill="none" xmlns="http://www.w3.org/2000/svg">'
+        svgHTML = '<svg class="w-full h-full" viewBox="0 0 200 120" preserveAspectRatio="xMaxYMax meet" fill="none" xmlns="http://www.w3.org/2000/svg">'
           + '<circle cx="150" cy="35" r="14" fill="#A0AEC0" fill-opacity="0.5"/>'
           + '<path d="M40 120C90 85 150 90 200 120H40Z" fill="#CBD5E0" fill-opacity="0.6"/>'
           + '<path d="M0 120C60 75 130 80 200 120H0Z" fill="#BEE3F8" fill-opacity="0.5"/>'
@@ -480,7 +515,7 @@
         if (badge) badge.className = 'inline-flex items-center gap-2 bg-[#e2efe7] px-3.5 py-1.5 rounded-full border border-[#006038]/10 text-xs font-semibold text-[#006038] mt-4 shadow-sm';
         if (badgeText) badgeText.textContent = 'Optimal Growth Weather';
 
-        svgHTML = '<svg class="w-full h-full text-right" viewBox="0 0 200 120" preserveAspectRatio="xMaxYMax meet" fill="none" xmlns="http://www.w3.org/2000/svg">'
+        svgHTML = '<svg class="w-full h-full" viewBox="0 0 200 120" preserveAspectRatio="xMaxYMax meet" fill="none" xmlns="http://www.w3.org/2000/svg">'
           + '<circle cx="150" cy="35" r="16" fill="#F6AD55"/>'
           + '<path d="M50 120C90 85 140 90 200 120H50Z" fill="#C5E3D2" fill-opacity="0.7"/>'
           + '<path d="M0 120C60 75 120 80 200 120H0Z" fill="#A4D4B8" fill-opacity="0.6"/>'
@@ -494,7 +529,7 @@
         if (badge) badge.className = 'inline-flex items-center gap-2 bg-[#e8efe5] px-3.5 py-1.5 rounded-full border border-[#006038]/10 text-xs font-semibold text-[#006038] mt-4 shadow-sm';
         if (badgeText) badgeText.textContent = 'Warm / Growth Active';
 
-        svgHTML = '<svg class="w-full h-full text-right" viewBox="0 0 200 120" preserveAspectRatio="xMaxYMax meet" fill="none" xmlns="http://www.w3.org/2000/svg">'
+        svgHTML = '<svg class="w-full h-full" viewBox="0 0 200 120" preserveAspectRatio="xMaxYMax meet" fill="none" xmlns="http://www.w3.org/2000/svg">'
           + '<circle cx="150" cy="30" r="18" fill="#F8C055"/>'
           + '<path d="M40 120C80 80 130 85 200 120H40Z" fill="#C5E3D2" fill-opacity="0.7"/>'
           + '<path d="M0 120C50 70 110 75 200 120H0Z" fill="#A4D4B8" fill-opacity="0.6"/>'
@@ -508,7 +543,7 @@
         if (badge) badge.className = 'inline-flex items-center gap-2 bg-[#fae8d5] px-3.5 py-1.5 rounded-full border border-[#c05621]/10 text-xs font-semibold text-[#c05621] mt-4 shadow-sm';
         if (badgeText) badgeText.textContent = 'High Heat / Irrigation Advised';
 
-        svgHTML = '<svg class="w-full h-full text-right" viewBox="0 0 200 120" preserveAspectRatio="xMaxYMax meet" fill="none" xmlns="http://www.w3.org/2000/svg">'
+        svgHTML = '<svg class="w-full h-full" viewBox="0 0 200 120" preserveAspectRatio="xMaxYMax meet" fill="none" xmlns="http://www.w3.org/2000/svg">'
           + '<circle cx="150" cy="30" r="22" fill="#DD6B20" fill-opacity="0.2"/>'
           + '<circle cx="150" cy="30" r="15" fill="#ED8936"/>'
           + '<path d="M40 120C85 85 135 90 200 120H40Z" fill="#FBD38D" fill-opacity="0.5"/>'

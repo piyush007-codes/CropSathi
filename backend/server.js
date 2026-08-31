@@ -9,6 +9,7 @@ import fieldRoutes from './src/routes/fieldRoutes.js';
 import monitoringRoutes from './src/routes/monitoringRoutes.js';
 import { protect } from './src/middleware/authMiddleware.js';
 import User from './src/models/User.js';
+import { startCronJobs, mountCronRoutes } from './src/cron/scheduler.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -82,10 +83,14 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+// Mount cron manual trigger routes
+mountCronRoutes(app);
+
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   await connectDB();
+  startCronJobs();
   app.listen(PORT, () => {
     console.log(`🚀 CropSathi Backend running on http://localhost:${PORT}`);
   });

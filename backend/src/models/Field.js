@@ -36,6 +36,16 @@ const fieldSchema = new mongoose.Schema(
         message: 'Polygon must have at least 3 points',
       },
     },
+    boundary: {
+      type: {
+        type: String,
+        enum: ['Polygon'],
+        default: 'Polygon',
+      },
+      coordinates: {
+        type: [[[Number]]],
+      },
+    },
     areaInHectares: {
       type: Number,
       default: 0,
@@ -62,6 +72,10 @@ const fieldSchema = new mongoose.Schema(
       enum: ['active', 'inactive', 'archived'],
       default: 'active',
     },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
     lastWeatherPollAt: {
       type: Date,
       default: null,
@@ -76,14 +90,50 @@ const fieldSchema = new mongoose.Schema(
   }
 );
 
-// Calculate center point before saving
+// ─── Soft-delete: auto-exclude deleted docs from all queries ───────────────
+function excludeSoftDeleted(query) {
+  if (!query.getOptions().deletedAt) {
+    query.where({ deletedAt: null });
+  }
+}
+
+fieldSchema.pre('find', excludeSoftDeleted);
+fieldSchema.pre('findOne', excludeSoftDeleted);
+fieldSchema.pre('findById', excludeSoftDeleted);
+fieldSchema.pre('count', excludeSoftDeleted);
+fieldSchema.pre('countDocuments', excludeSoftDeleted);
+// Note: findOneAndUpdate / findByIdAndUpdate are NOT hooked here.
+// Controllers add deletedAt:null explicitly where needed, and restore needs to
+// bypass soft-delete to find already-deleted docs.
+fieldSchema.pre('aggregate', function () {
+  this.pipeline().unshift({ $match: { deletedAt: null } });
+});
+
+// ─── Indexes ───────────────────────────────────────────────────────────────
+fieldSchema.index({ userId: 1, deletedAt: 1 });
+fieldSchema.index({ status: 1, deletedAt: 1 });
+
+// ─── Calculate center + sync GeoJSON boundary before saving ────────────────
 fieldSchema.pre('save', function (next) {
+  // Compute centroid from polygon
   if (this.polygon && this.polygon.length > 0) {
     const sumLat = this.polygon.reduce((sum, p) => sum + p.lat, 0);
     const sumLng = this.polygon.reduce((sum, p) => sum + p.lng, 0);
     this.centerLat = sumLat / this.polygon.length;
     this.centerLng = sumLng / this.polygon.length;
   }
+
+  // Auto-sync GeoJSON boundary from polygon if boundary not explicitly set
+  if (this.polygon && this.polygon.length >= 3 && (!this.boundary || !this.boundary.coordinates)) {
+    // GeoJSON Polygon: first ring must be closed (first == last point)
+    const ring = this.polygon.map(p => [p.lng, p.lat]);
+    ring.push(ring[0]); // close the ring
+    this.boundary = {
+      type: 'Polygon',
+      coordinates: [ring],
+    };
+  }
+
   next();
 });
 

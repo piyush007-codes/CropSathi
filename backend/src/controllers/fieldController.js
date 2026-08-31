@@ -5,8 +5,9 @@ import Field from '../models/Field.js';
 // @access  Private
 export const createField = async (req, res) => {
   try {
-    const { name, cropType, sowingDate, polygon, areaInHectares, areaInAcres } = req.body;
+    const { name, cropType, sowingDate, polygon, boundary, areaInHectares, areaInAcres, cropStage, soilType } = req.body;
 
+    // Accept polygon (legacy) or boundary (GeoJSON)
     if (!polygon || polygon.length < 3) {
       return res.status(400).json({
         success: false,
@@ -18,10 +19,13 @@ export const createField = async (req, res) => {
       userId: req.user.id,
       name,
       cropType,
+      cropStage,
       sowingDate,
       polygon,
+      boundary,
       areaInHectares,
       areaInAcres,
+      soilType,
     });
 
     res.status(201).json({
@@ -91,7 +95,7 @@ export const getField = async (req, res) => {
 export const updateField = async (req, res) => {
   try {
     // Whitelist allowed fields to prevent mass assignment
-    const allowedFields = ['name', 'cropType', 'sowingDate', 'polygon', 'areaInHectares', 'areaInAcres'];
+    const allowedFields = ['name', 'cropType', 'cropStage', 'sowingDate', 'polygon', 'boundary', 'areaInHectares', 'areaInAcres', 'soilType', 'status'];
     const updates = {};
     for (const key of allowedFields) {
       if (req.body[key] !== undefined) {
@@ -100,7 +104,7 @@ export const updateField = async (req, res) => {
     }
 
     const field = await Field.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user.id },
+      { _id: req.params.id, userId: req.user.id, deletedAt: null },
       updates,
       { new: true, runValidators: true }
     );
@@ -124,15 +128,16 @@ export const updateField = async (req, res) => {
   }
 };
 
-// @desc    Delete field
+// @desc    Soft delete field
 // @route   DELETE /api/fields/:id
 // @access  Private
 export const deleteField = async (req, res) => {
   try {
-    const field = await Field.findOneAndDelete({
-      _id: req.params.id,
-      userId: req.user.id,
-    });
+    const field = await Field.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user.id, deletedAt: null },
+      { deletedAt: new Date() },
+      { new: true }
+    );
 
     if (!field) {
       return res.status(404).json({
@@ -144,6 +149,37 @@ export const deleteField = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Field deleted successfully',
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// @desc    Restore soft-deleted field
+// @route   PATCH /api/fields/:id/restore
+// @access  Private
+export const restoreField = async (req, res) => {
+  try {
+    // Bypass soft-delete filter to find the deleted field
+    const field = await Field.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user.id, deletedAt: { $ne: null } },
+      { deletedAt: null },
+      { new: true }
+    );
+
+    if (!field) {
+      return res.status(404).json({
+        success: false,
+        message: 'Deleted field not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: field,
     });
   } catch (error) {
     res.status(500).json({

@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "seed": "node scripts/seedCatalogs.js"
+    "seed": "node scripts/seedCatalogs.js",
+    "cron:test-weather": "node -e \"import('./src/cron/pollWeather.js').then(m => m.pollWeatherForActiveFarms()).then(console.log)\"",
+    "cron:test-satellite": "node -e \"import('./src/cron/pollSatellite.js').then(m => m.pollSatelliteForActiveFarms()).then(console.log)\""
   },
   "dependencies": {
     "axios": "^1.7.0",

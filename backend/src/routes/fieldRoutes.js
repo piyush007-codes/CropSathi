@@ -6,6 +6,7 @@ import {
   getField,
   updateField,
   deleteField,
+  restoreField,
 } from '../controllers/fieldController.js';
 
 const router = express.Router();
@@ -21,5 +22,7 @@ router.route('/:id')
   .get(getField)
   .put(updateField)
   .delete(deleteField);
+
+router.patch('/:id/restore', restoreField);
 
 export default router;

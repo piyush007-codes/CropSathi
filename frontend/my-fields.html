@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="preferences.js"></script>
+  <script src="nav-profile.js"></script>
 
   <style>
     /* Typography Rules from design.md */
@@ -113,8 +114,8 @@
           <i data-lucide="bell" class="w-5 h-5 text-[#1b1c1c]"></i>
           <span class="w-2.5 h-2.5 bg-[#933302] rounded-full absolute top-2 right-2 border-2 border-[#fbf9f8]"></span>
         </button>
-        <div id="mfProfilePhoto" class="w-11 h-11 rounded-full bg-[#f0eded] overflow-hidden border-2 border-[#ffffff] shadow-sm">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250" alt="Profile" class="w-full h-full object-cover">
+        <div id="navProfilePhoto" class="w-11 h-11 rounded-full bg-[#eae8e7] flex items-center justify-center overflow-hidden border-2 border-[#ffffff] shadow-sm flex-shrink-0">
+          <span id="navAvatarInitial" class="font-headline text-lg font-bold text-[#006038]"></span>
         </div>
       </div>
     </header>
@@ -270,16 +271,12 @@
         const profileData = await profileResponse.json();
 
         if (profileData.success) {
-          // Update profile photo
-          const photo = profileData.user.profilePhoto;
-          if (photo) {
-            localStorage.setItem('cropsathi_profile_photo', photo);
-            const avatarContainer = document.getElementById('mfProfilePhoto');
-            if (avatarContainer) {
-              const existingImg = avatarContainer.querySelector('img');
-              if (existingImg) existingImg.src = photo;
-            }
+          // Update profile photo and avatar initial
+          const navAvatar = document.getElementById('navAvatarInitial');
+          if (navAvatar && profileData.user.name) {
+            navAvatar.textContent = profileData.user.name.trim().charAt(0).toUpperCase();
           }
+          applyProfilePhoto(profileData.user.profilePhoto);
 
           if (profileData.user.farmDetails) {
             const { village, district } = profileData.user.farmDetails;
@@ -532,16 +529,6 @@
       );
       renderFields(filtered);
     });
-
-    // Load cached profile photo immediately
-    const cachedPhoto = localStorage.getItem('cropsathi_profile_photo');
-    if (cachedPhoto) {
-      const avatarContainer = document.getElementById('mfProfilePhoto');
-      if (avatarContainer) {
-        const existingImg = avatarContainer.querySelector('img');
-        if (existingImg) existingImg.src = cachedPhoto;
-      }
-    }
 
     // Load data on page load
     loadData();

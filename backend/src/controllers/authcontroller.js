@@ -172,7 +172,6 @@ export const changePassword = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
 // @desc    Update user profile (name and photo)
 // @route   PUT /api/auth/update-profile
 // @access  Private
@@ -222,9 +221,6 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
-=======
->>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
 export const updateLocation = async (req, res) => {
   try {
     const { latitude, longitude, fullAddress, addressComponents } = req.body;

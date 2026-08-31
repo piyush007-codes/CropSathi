@@ -8,8 +8,8 @@
   <script>tailwind.config = { darkMode: 'class' };</script>
   <!-- Google Fonts: Be Vietnam Pro & Noto Sans -->
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-<script src="preferences.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script><script src="preferences.js"></script>
+<script src="nav-profile.js"></script>
 
 
   <script>
@@ -29,15 +29,12 @@
 
           if (nameElem) nameElem.textContent = user.name || 'Farmer';
 
-          // Update profile photo
-          if (user.profilePhoto) {
-            localStorage.setItem('cropsathi_profile_photo', user.profilePhoto);
-            const avatarContainer = document.getElementById('dashProfilePhoto');
-            if (avatarContainer) {
-              const existingImg = avatarContainer.querySelector('img');
-              if (existingImg) existingImg.src = user.profilePhoto;
-            }
+          // Update profile photo and avatar initial
+          const navAvatar = document.getElementById('navAvatarInitial');
+          if (navAvatar && user.name) {
+            navAvatar.textContent = user.name.trim().charAt(0).toUpperCase();
           }
+          applyProfilePhoto(user.profilePhoto);
 
           if (locationElem && user.farmDetails) {
             const village = user.farmDetails.village || '';
@@ -153,11 +150,7 @@
     <!-- Top Header -->
     <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
       <div>
-<<<<<<< HEAD
         <h1 class="text-3xl font-bold text-[#1b1c1c]"><span id="dashHelloText" data-i18n="dash_hello">Hello</span>, <span id="userName">Harris</span></h1>
-=======
-        <h1 class="text-3xl font-bold text-[#1b1c1c]" data-i18n="dash_hello">Hello, <span id="userName">Harris</span></h1>
->>>>>>> a75bcd36f1adfd02198398784bc138e4b67c1ef1
         <p class="text-[#3f4941] text-sm flex items-center gap-1 mt-1">
           <i data-lucide="map-pin" class="w-4 h-4 text-[#933302]"></i> <span id="userLocation">Central Valley</span>
         </p>
@@ -172,8 +165,8 @@
           <i data-lucide="bell" class="w-5 h-5 text-[#1b1c1c]"></i>
           <span class="w-2.5 h-2.5 bg-[#933302] rounded-full absolute top-2 right-2 border-2 border-[#fbf9f8]"></span>
         </button>
-        <div id="dashProfilePhoto" class="w-11 h-11 rounded-full bg-[#f0eded] overflow-hidden border-2 border-[#ffffff] shadow-sm">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250" alt="Profile" class="w-full h-full object-cover">
+        <div id="navProfilePhoto" class="w-11 h-11 rounded-full bg-[#eae8e7] flex items-center justify-center overflow-hidden border-2 border-[#ffffff] shadow-sm flex-shrink-0">
+          <span id="navAvatarInitial" class="font-headline text-lg font-bold text-[#006038]"></span>
         </div>
       </div>
     </header>
@@ -561,15 +554,6 @@
       if (container) container.innerHTML = svgHTML;
     }
 
-    // Load cached profile photo immediately
-    const cachedPhoto = localStorage.getItem('cropsathi_profile_photo');
-    if (cachedPhoto) {
-      const avatarContainer = document.getElementById('dashProfilePhoto');
-      if (avatarContainer) {
-        const existingImg = avatarContainer.querySelector('img');
-        if (existingImg) existingImg.src = cachedPhoto;
-      }
-    }
   </script>
 </body>
 </html>

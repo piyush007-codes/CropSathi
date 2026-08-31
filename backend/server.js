@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import connectDB from './src/config/db.js';
 import authRoutes from './src/routes/authroutes.js';
 import fieldRoutes from './src/routes/fieldRoutes.js';
+import monitoringRoutes from './src/routes/monitoringRoutes.js';
 import { protect } from './src/middleware/authMiddleware.js';
 import User from './src/models/User.js';
 
@@ -46,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Mount API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/fields', fieldRoutes);
+app.use('/api/monitoring', monitoringRoutes);
 
 // Health Check
 app.get('/api/test', (req, res) => {

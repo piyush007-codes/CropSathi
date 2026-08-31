@@ -16,7 +16,12 @@ const fieldSchema = new mongoose.Schema(
     cropType: {
       type: String,
       required: [true, 'Crop type is required'],
-      enum: ['Wheat', 'Rice', 'Maize', 'Cotton', 'Sugarcane', 'Potato', 'Grapes', 'Other'],
+      enum: ['Wheat', 'Rice', 'Maize', 'Cotton', 'Sugarcane', 'Potato', 'Grapes', 'Soybean', 'Tur', 'Other'],
+    },
+    cropStage: {
+      type: String,
+      enum: ['sowing', 'vegetative', 'flowering', 'fruiting', 'maturity', 'harvested'],
+      default: 'vegetative',
     },
     sowingDate: {
       type: Date,
@@ -47,10 +52,23 @@ const fieldSchema = new mongoose.Schema(
       type: Number,
       default: null,
     },
+    soilType: {
+      type: String,
+      enum: ['Alluvial', 'Black', 'Red', 'Laterite', 'Clayey', 'Sandy', 'Loamy', 'Other'],
+      default: 'Other',
+    },
     status: {
       type: String,
       enum: ['active', 'inactive', 'archived'],
       default: 'active',
+    },
+    lastWeatherPollAt: {
+      type: Date,
+      default: null,
+    },
+    lastRiskScoreAt: {
+      type: Date,
+      default: null,
     },
   },
   {

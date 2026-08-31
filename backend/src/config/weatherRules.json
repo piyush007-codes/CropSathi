@@ -1,0 +1,171 @@
+{
+  "version": "1.0",
+  "description": "Weather-based disease risk rules per (crop, disease). Loaded at startup, cached in memory.",
+  "rules": {
+    "cotton": [
+      {
+        "diseaseCode": "cotton_bollworm",
+        "diseaseName": "Cotton Bollworm",
+        "humidityMin": 70,
+        "tempMin": 22,
+        "tempMax": 32,
+        "rainfallMin": 5,
+        "riskWeight": 0.8,
+        "notes": "Warm, humid conditions favor bollworm activity"
+      },
+      {
+        "diseaseCode": "cotton_wilt",
+        "diseaseName": "Cotton Wilt",
+        "humidityMin": 60,
+        "tempMin": 25,
+        "tempMax": 35,
+        "rainfallMin": 0,
+        "riskWeight": 0.6,
+        "notes": "Wilt thrives in warm soil with moisture stress cycles"
+      }
+    ],
+    "soybean": [
+      {
+        "diseaseCode": "soybean_rust",
+        "diseaseName": "Soybean Rust",
+        "humidityMin": 80,
+        "tempMin": 18,
+        "tempMax": 28,
+        "rainfallMin": 10,
+        "riskWeight": 0.9,
+        "notes": "Puccinia requires leaf wetness + high humidity"
+      },
+      {
+        "diseaseCode": "soybean_leaf_spot",
+        "diseaseName": "Soybean Leaf Spot",
+        "humidityMin": 75,
+        "tempMin": 20,
+        "tempMax": 30,
+        "rainfallMin": 5,
+        "riskWeight": 0.65,
+        "notes": "Cercospora leaf spot favored by warm wet conditions"
+      }
+    ],
+    "tur": [
+      {
+        "diseaseCode": "tur_wilt",
+        "diseaseName": "Tur Wilt",
+        "humidityMin": 55,
+        "tempMin": 25,
+        "tempMax": 35,
+        "rainfallMin": 0,
+        "riskWeight": 0.7,
+        "notes": "Fusarium wilt favors warm, poorly drained soils"
+      },
+      {
+        "diseaseCode": "tur_pod_borer",
+        "diseaseName": "Tur Pod Borer",
+        "humidityMin": 65,
+        "tempMin": 20,
+        "tempMax": 30,
+        "rainfallMin": 5,
+        "riskWeight": 0.75,
+        "notes": "Helicoverpa activity peaks in warm humid monsoon"
+      }
+    ],
+    "wheat": [
+      {
+        "diseaseCode": "wheat_rust",
+        "diseaseName": "Wheat Rust",
+        "humidityMin": 65,
+        "tempMin": 12,
+        "tempMax": 22,
+        "rainfallMin": 2,
+        "riskWeight": 0.85,
+        "notes": "Stripe/leaf rust requires cool moist conditions"
+      },
+      {
+        "diseaseCode": "wheat_powdery_mildew",
+        "diseaseName": "Wheat Powdery Mildew",
+        "humidityMin": 60,
+        "tempMin": 15,
+        "tempMax": 25,
+        "rainfallMin": 0,
+        "riskWeight": 0.6,
+        "notes": "High humidity without free water; moderate temps"
+      }
+    ],
+    "rice": [
+      {
+        "diseaseCode": "rice_blast",
+        "diseaseName": "Rice Blast",
+        "humidityMin": 85,
+        "tempMin": 25,
+        "tempMax": 30,
+        "rainfallMin": 15,
+        "riskWeight": 0.95,
+        "notes": "Magnaporthe oryzae thrives in warm, saturated conditions"
+      },
+      {
+        "diseaseCode": "rice_bacterial_leaf_blight",
+        "diseaseName": "Bacterial Leaf Blight",
+        "humidityMin": 80,
+        "tempMin": 28,
+        "tempMax": 35,
+        "rainfallMin": 10,
+        "riskWeight": 0.8,
+        "notes": "Xanthomonas favored by high temp + flooding"
+      }
+    ],
+    "maize": [
+      {
+        "diseaseCode": "maize_fall_armyworm",
+        "diseaseName": "Fall Armyworm",
+        "humidityMin": 60,
+        "tempMin": 22,
+        "tempMax": 32,
+        "rainfallMin": 5,
+        "riskWeight": 0.8,
+        "notes": "Spodoptera frugiperda favors warm humid conditions"
+      }
+    ],
+    "potato": [
+      {
+        "diseaseCode": "potato_late_blight",
+        "diseaseName": "Potato Late Blight",
+        "humidityMin": 80,
+        "tempMin": 15,
+        "tempMax": 22,
+        "rainfallMin": 5,
+        "riskWeight": 0.95,
+        "notes": "Phytophthora infestans — cool, wet conditions ideal"
+      }
+    ],
+    "sugarcane": [
+      {
+        "diseaseCode": "sugarcane_red_rot",
+        "diseaseName": "Sugarcane Red Rot",
+        "humidityMin": 75,
+        "tempMin": 25,
+        "tempMax": 35,
+        "rainfallMin": 5,
+        "riskWeight": 0.7,
+        "notes": "Colletotrichum favored by warm, humid conditions"
+      }
+    ],
+    "grapes": [
+      {
+        "diseaseCode": "grapes_downy_mildew",
+        "diseaseName": "Grapes Downy Mildew",
+        "humidityMin": 75,
+        "tempMin": 20,
+        "tempMax": 28,
+        "rainfallMin": 5,
+        "riskWeight": 0.8,
+        "notes": "Plasmopara viticola requires warm, wet conditions"
+      }
+    ]
+  },
+  "defaultThresholds": {
+    "humidityMin": 70,
+    "tempMin": 18,
+    "tempMax": 30,
+    "rainfallMin": 5,
+    "riskWeight": 0.5
+  }
+}

@@ -116,10 +116,7 @@ async function pollWeatherForActiveFarms() {
   return { polled, errors };
 }
 
-/**
- * Schedule: every 2 hours at minute 0.
- * Uses node-cron cron expression: second(0) minute(0) hour(*/2) * * * *
- */
+// Schedule: every 2 hours at minute 0 (cron: 0 0 */2 * *)
 export function startPollWeatherCron() {
   cron.schedule('0 0 */2 * *', async () => {
     console.log('⏰ [cron] poll-weather triggered');

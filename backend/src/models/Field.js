@@ -91,9 +91,11 @@ const fieldSchema = new mongoose.Schema(
 );
 
 // ─── Soft-delete: auto-exclude deleted docs from all queries ───────────────
-function excludeSoftDeleted(query) {
-  if (!query.getOptions().deletedAt) {
-    query.where({ deletedAt: null });
+// In Mongoose pre-hooks, `this` is the Query, first param is `next` callback.
+function excludeSoftDeleted() {
+  const opts = this.options || {};
+  if (!opts.deletedAt) {
+    this.where({ deletedAt: null });
   }
 }
 

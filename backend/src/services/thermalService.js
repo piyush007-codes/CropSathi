@@ -1,5 +1,6 @@
 import ThermalReading from '../models/ThermalReading.js';
 import Field from '../models/Field.js';
+import { fetchLandsatLst } from './landsatService.js';
 
 // ─── Per-crop thermal constants (spec §7.3) ───────────────────────────────
 // estimated_canopy_temp = air_temp + crop_offset - (humidity - 50) * humidity_coefficient
@@ -89,12 +90,52 @@ async function getFarmTrailingBaseline(farmId, trailingDays = 14) {
 // ─── Thermal Reading Creation ──────────────────────────────────────────────
 
 /**
- * Compute a thermal reading for a farm from its latest weather data.
- * Returns the saved ThermalReading document.
+ * Compute a thermal reading for a farm.
+ * Tries real Landsat LST first; falls back to formula-based estimation.
  */
 export async function computeThermalReading(farm, weatherReading) {
+  const hasCopernicusCredentials = process.env.COPERNICUS_CLIENT_ID && process.env.COPERNICUS_CLIENT_SECRET;
+
+  // Try real Landsat LST first
+  if (hasCopernicusCredentials) {
+    try {
+      const landsat = await fetchLandsatLst(farm);
+
+      // Average the grid for the scalar value
+      const avgLst = averageGrid(landsat.thermalGrid);
+
+      // Compute baseline
+      const district = farm.farmDetails?.district;
+      let baseline = await getDistrictBaseline(district);
+      if (baseline === null) {
+        baseline = await getFarmTrailingBaseline(farm._id);
+      }
+
+      const anomalyC = baseline !== null
+        ? Math.round((avgLst - baseline) * 100) / 100
+        : 0;
+
+      const reading = await ThermalReading.create({
+        farmId: farm._id,
+        observedAt: landsat.observedAt,
+        estimatedCanopyTempC: avgLst,
+        baselineTempC: baseline,
+        anomalyC,
+        resolution: 'landsat-8-9',
+        thermalGrid: landsat.thermalGrid,
+        sceneSource: 'landsat-8-9',
+        sceneId: landsat.sceneInfo.sceneId,
+      });
+
+      return reading;
+    } catch (error) {
+      console.warn('Landsat LST fetch failed, falling back to formula:', error.message);
+    }
+  }
+
+  // Fallback: formula-based estimation
   if (!weatherReading) {
-    throw new Error('Weather reading required for thermal estimation');
+    throw new Error('Weather reading required for thermal estimation (no Landsat data available)');
   }
 
   const estimated = estimateCanopyTemp(
@@ -103,7 +144,6 @@ export async function computeThermalReading(farm, weatherReading) {
     farm.cropType,
   );
 
-  // Try district baseline first, fallback to farm baseline
   const district = farm.farmDetails?.district;
   let baseline = await getDistrictBaseline(district);
   if (baseline === null) {
@@ -121,9 +161,19 @@ export async function computeThermalReading(farm, weatherReading) {
     baselineTempC: baseline,
     anomalyC,
     resolution: baseline !== null ? 'district' : 'farm_simulated',
+    sceneSource: 'formula',
   });
 
   return reading;
+}
+
+// Helper to average a 10x10 grid
+const GRID_SIZE = 10;
+function averageGrid(grid) {
+  if (!grid || !Array.isArray(grid)) return 30;
+  const flat = grid.flat().filter(v => v != null && !isNaN(v));
+  if (flat.length === 0) return 30;
+  return Math.round((flat.reduce((s, v) => s + v, 0) / flat.length) * 100) / 100;
 }
 
 /**

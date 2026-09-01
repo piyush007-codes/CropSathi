@@ -103,6 +103,13 @@ export const updateField = async (req, res) => {
       }
     }
 
+    // Auto-generate GeoJSON boundary from polygon if updating polygon
+    if (updates.polygon && updates.polygon.length >= 3 && (!updates.boundary || !updates.boundary.coordinates?.length)) {
+      const ring = updates.polygon.map(p => [p.lng, p.lat]);
+      ring.push(ring[0]); // close the ring
+      updates.boundary = { type: 'Polygon', coordinates: [ring] };
+    }
+
     const field = await Field.findOneAndUpdate(
       { _id: req.params.id, userId: req.user.id, deletedAt: null },
       updates,

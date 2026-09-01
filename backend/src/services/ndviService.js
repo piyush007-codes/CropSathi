@@ -1,5 +1,6 @@
 import NdviReading from '../models/NdviReading.js';
 import Field from '../models/Field.js';
+import { fetchSentinelNdvi } from './sentinelService.js';
 
 // ─── Crop-specific NDVI baselines (typical peak-season values) ─────────────
 const CROP_NDVI_BASELINE = {
@@ -107,12 +108,52 @@ function computeAnomalyScore(currentNdvi, trailingAvg, readings) {
 }
 
 /**
- * Fetch/store NDVI reading for a farm (simulated mode).
+ * Fetch/store NDVI reading for a farm.
+ * Tries real Sentinel-2 data first; falls back to simulated if credentials missing or API fails.
  */
 export async function fetchNdviForFarm(farm) {
   const now = new Date();
-  const simulated = generateSimulatedNdvi(farm);
-  const trailingAvg = await computeTrailingAvg(farm._id, simulated.ndvi, now);
+
+  // Try real Sentinel-2 data first
+  let ndvi, ndre, gridData = null, sceneSource = 'simulated', sceneId = null;
+  let observedAt = now;
+  let cloudCoverPct = 0;
+  let pixelCountPureCrop = null;
+
+  const hasCopernicusCredentials = process.env.COPERNICUS_CLIENT_ID && process.env.COPERNICUS_CLIENT_SECRET;
+
+  if (hasCopernicusCredentials) {
+    try {
+      const sentinel = await fetchSentinelNdvi(farm);
+
+      // Average the grid to get scalar values
+      ndvi = averageGrid(sentinel.ndviGrid);
+      ndre = averageGrid(sentinel.ndreGrid);
+      gridData = { ndvi: sentinel.ndviGrid, ndre: sentinel.ndreGrid };
+      sceneSource = 'sentinel-2';
+      sceneId = sentinel.sceneInfo.sceneId;
+      cloudCoverPct = sentinel.sceneInfo.cloudCover || 0;
+      observedAt = sentinel.observedAt;
+
+      // Estimate pixel count from grid dimensions
+      pixelCountPureCrop = GRID_SIZE * GRID_SIZE;
+    } catch (error) {
+      console.warn('Sentinel-2 fetch failed, falling back to simulated:', error.message);
+      const simulated = generateSimulatedNdvi(farm);
+      ndvi = simulated.ndvi;
+      ndre = simulated.ndre;
+      cloudCoverPct = simulated.cloudCoverPct;
+      pixelCountPureCrop = simulated.pixelCountPureCrop;
+    }
+  } else {
+    const simulated = generateSimulatedNdvi(farm);
+    ndvi = simulated.ndvi;
+    ndre = simulated.ndre;
+    cloudCoverPct = simulated.cloudCoverPct;
+    pixelCountPureCrop = simulated.pixelCountPureCrop;
+  }
+
+  const trailingAvg = await computeTrailingAvg(farm._id, ndvi, observedAt);
 
   // Get recent readings for stddev
   const recentForStd = await NdviReading.find({ farmId: farm._id })
@@ -120,20 +161,33 @@ export async function fetchNdviForFarm(farm) {
     .limit(10)
     .lean();
 
-  const anomalyScore = computeAnomalyScore(simulated.ndvi, trailingAvg, recentForStd);
+  const anomalyScore = computeAnomalyScore(ndvi, trailingAvg, recentForStd);
 
   const reading = await NdviReading.create({
     farmId: farm._id,
-    observedAt: now,
-    ndvi: simulated.ndvi,
-    ndre: simulated.ndre,
-    cloudCoverPct: simulated.cloudCoverPct,
+    observedAt,
+    ndvi,
+    ndre,
+    cloudCoverPct,
     trailingAvgNdvi28d: trailingAvg,
     anomalyScore,
-    pixelCountPureCrop: simulated.pixelCountPureCrop,
+    pixelCountPureCrop,
+    ndviGrid: gridData?.ndvi || null,
+    ndreGrid: gridData?.ndre || null,
+    sceneSource,
+    sceneId,
   });
 
   return reading;
+}
+
+// Helper to average a 10x10 grid into a single value
+const GRID_SIZE = 10;
+function averageGrid(grid) {
+  if (!grid || !Array.isArray(grid)) return 0.5;
+  const flat = grid.flat().filter(v => v != null && !isNaN(v));
+  if (flat.length === 0) return 0.5;
+  return Math.round((flat.reduce((s, v) => s + v, 0) / flat.length) * 1000) / 1000;
 }
 
 /**

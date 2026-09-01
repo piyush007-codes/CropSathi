@@ -40,6 +40,37 @@ const ndviReadingSchema = new mongoose.Schema({
     type: Number,
     default: null,
   },
+  ndviGrid: {
+    type: [[Number]],
+    default: null,
+    validate: {
+      validator: function(v) {
+        if (!v) return true;
+        return Array.isArray(v) && v.length === 10 && v.every(row => Array.isArray(row) && row.length === 10);
+      },
+      message: 'NDVI grid must be a 10x10 array',
+    },
+  },
+  ndreGrid: {
+    type: [[Number]],
+    default: null,
+    validate: {
+      validator: function(v) {
+        if (!v) return true;
+        return Array.isArray(v) && v.length === 10 && v.every(row => Array.isArray(row) && row.length === 10);
+      },
+      message: 'NDRE grid must be a 10x10 array',
+    },
+  },
+  sceneSource: {
+    type: String,
+    enum: ['sentinel-2', 'simulated'],
+    default: 'simulated',
+  },
+  sceneId: {
+    type: String,
+    default: null,
+  },
 }, { timestamps: true });
 
 ndviReadingSchema.index({ farmId: 1, observedAt: -1 });

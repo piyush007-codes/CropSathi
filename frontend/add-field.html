@@ -423,7 +423,7 @@
           body: JSON.stringify({ name, cropType, sowingDate, polygon, areaInHectares, areaInAcres: areaInHectares * 2.47105 })
         });
         const data = await res.json();
-        if (data.success) { window.location.href = 'my-fields.html'; }
+        if (data.success) { localStorage.setItem('newFieldCreated', 'true'); window.location.href = 'dashboard.html'; }
         else { alert(data.message || 'Error saving field'); }
       } catch (e) { console.error('Error saving field:', e); alert('Error saving field. Please try again.'); }
     }

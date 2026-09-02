@@ -257,148 +257,27 @@
           </span>
         </div>
 
-        <!-- Scrollable Cards Container -->
+        <!-- Scrollable Cards Container (dynamically populated) -->
         <div id="cropScrollContainer" class="flex gap-4 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none py-1">
-          
-          <!-- Rice Field Gauge Card -->
-          <div class="min-w-[220px] bg-[#ffffff] p-5 rounded-xl border border-[#e4e2e1] flex flex-col items-center tactile-card shrink-0">
-            <div class="flex items-start justify-between w-full mb-1">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-[#006038]/10 text-[#006038] flex items-center justify-center shrink-0">
-                  <i data-lucide="wheat" class="w-4 h-4"></i>
-                </div>
-                <div>
-                  <h3 class="font-bold text-sm text-[#1b1c1c] font-headline leading-tight">Rice Field</h3>
-                  <p class="text-[11px] text-[#3f4941]">4.2 Ha</p>
-                </div>
-              </div>
-              <span class="text-[10px] font-bold text-[#006038] bg-[#006038]/10 px-2 py-0.5 rounded whitespace-nowrap ml-1">Optimal</span>
+          <!-- Loading skeleton -->
+          <div id="healthLoading" class="flex gap-4">
+            <div class="min-w-[220px] bg-white p-5 rounded-xl border border-[#e4e2e1] flex flex-col items-center shrink-0 animate-pulse">
+              <div class="w-full h-8 bg-[#f0eded] rounded mb-3"></div>
+              <div class="w-36 h-36 bg-[#f0eded] rounded-full mb-3"></div>
+              <div class="w-full h-4 bg-[#f0eded] rounded"></div>
             </div>
-
-            <!-- 270-degree Dial Gauge Meter (r=36, Circumference ~ 226.2, 270 arc length = 169.6) -->
-            <div class="relative w-36 h-36 my-1 flex items-center justify-center">
-              <svg class="w-full h-full transform rotate-[135deg]" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="36" stroke="#e4e2e1" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="169.6 226.2"/>
-                <!-- Score 92/100 -> Offset = 169.6 * (1 - 0.92) ≈ 13.5 -->
-                <circle cx="50" cy="50" r="36" stroke="#006038" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="169.6 226.2" stroke-dashoffset="13.5"/>
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span class="text-3xl font-extrabold text-[#1b1c1c] font-headline leading-none">92</span>
-                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1" data-i18n="dash_avg_score">AVG SCORE</span>
-              </div>
-            </div>
-
-            <div class="w-full pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
-              <span class="text-[#3f4941]" data-i18n="dash_action">Action:</span>
-              <span class="font-semibold text-[#006038]" data-i18n="dash_no_action">No Action Needed</span>
+            <div class="min-w-[220px] bg-white p-5 rounded-xl border border-[#e4e2e1] flex flex-col items-center shrink-0 animate-pulse">
+              <div class="w-full h-8 bg-[#f0eded] rounded mb-3"></div>
+              <div class="w-36 h-36 bg-[#f0eded] rounded-full mb-3"></div>
+              <div class="w-full h-4 bg-[#f0eded] rounded"></div>
             </div>
           </div>
-
-          <!-- Corn Field Gauge Card -->
-          <div class="min-w-[220px] bg-[#ffffff] p-5 rounded-xl border border-[#e4e2e1] flex flex-col items-center tactile-card shrink-0">
-            <div class="flex items-start justify-between w-full mb-1">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-[#1a7a4c]/10 text-[#1a7a4c] flex items-center justify-center shrink-0">
-                  <i data-lucide="corn" class="w-4 h-4"></i>
-                </div>
-                <div>
-                  <h3 class="font-bold text-sm text-[#1b1c1c] font-headline leading-tight">Corn Field</h3>
-                  <p class="text-[11px] text-[#3f4941]">6.8 Ha</p>
-                </div>
-              </div>
-              <span class="text-[10px] font-bold text-[#1a7a4c] bg-[#1a7a4c]/10 px-2 py-0.5 rounded whitespace-nowrap ml-1">Good</span>
-            </div>
-
-            <!-- 270-degree Dial Gauge Meter -->
-            <div class="relative w-36 h-36 my-1 flex items-center justify-center">
-              <svg class="w-full h-full transform rotate-[135deg]" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="36" stroke="#e4e2e1" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="169.6 226.2"/>
-                <!-- Score 78/100 -> Offset = 169.6 * (1 - 0.78) ≈ 37.3 -->
-                <circle cx="50" cy="50" r="36" stroke="#1a7a4c" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="169.6 226.2" stroke-dashoffset="37.3"/>
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span class="text-3xl font-extrabold text-[#1b1c1c] font-headline leading-none">78</span>
-                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1" data-i18n="dash_avg_score">AVG SCORE</span>
-              </div>
-            </div>
-
-            <div class="w-full pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
-              <span class="text-[#3f4941]" data-i18n="dash_action">Action:</span>
-              <span class="font-semibold text-[#1b1c1c]" data-i18n="dash_irigate_48h">Irrigate in 48h</span>
-            </div>
+          <!-- Empty state (hidden by default) -->
+          <div id="healthEmpty" class="hidden text-center py-8 w-full">
+            <i data-lucide="sprout" class="w-10 h-10 text-[#6f7a71] mx-auto mb-2"></i>
+            <p class="text-sm text-[#6f7a71]">Add fields to see health scores</p>
+            <a href="add-field.html" class="text-xs text-[#006038] font-semibold hover:underline mt-1 inline-block">Add Field</a>
           </div>
-
-          <!-- Vineyard Gauge Card -->
-          <div class="min-w-[220px] bg-[#ffffff] p-5 rounded-xl border border-[#e4e2e1] flex flex-col items-center tactile-card shrink-0">
-            <div class="flex items-start justify-between w-full mb-1">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-[#006038]/10 text-[#006038] flex items-center justify-center shrink-0">
-                  <i data-lucide="grape" class="w-4 h-4"></i>
-                </div>
-                <div>
-                  <h3 class="font-bold text-sm text-[#1b1c1c] font-headline leading-tight">Vineyard</h3>
-                  <p class="text-[11px] text-[#3f4941]">2.1 Ha</p>
-                </div>
-              </div>
-              <span class="text-[10px] font-bold text-[#006038] bg-[#006038]/10 px-2 py-0.5 rounded whitespace-nowrap ml-1">Excellent</span>
-            </div>
-
-            <!-- 270-degree Dial Gauge Meter -->
-            <div class="relative w-36 h-36 my-1 flex items-center justify-center">
-              <svg class="w-full h-full transform rotate-[135deg]" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="36" stroke="#e4e2e1" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="169.6 226.2"/>
-                <!-- Score 95/100 -> Offset = 169.6 * (1 - 0.95) ≈ 8.5 -->
-                <circle cx="50" cy="50" r="36" stroke="#006038" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="169.6 226.2" stroke-dashoffset="8.5"/>
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span class="text-3xl font-extrabold text-[#1b1c1c] font-headline leading-none">95</span>
-                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1" data-i18n="dash_avg_score">AVG SCORE</span>
-              </div>
-            </div>
-
-            <div class="w-full pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
-              <span class="text-[#3f4941]" data-i18n="dash_action">Action:</span>
-              <span class="font-semibold text-[#006038]" data-i18n="dash_canopy_pruning">Canopy Pruning</span>
-            </div>
-          </div>
-
-          <!-- Potato Crop Gauge Card -->
-          <div class="min-w-[220px] bg-[#ffffff] p-5 rounded-xl border border-[#ffb599] flex flex-col items-center tactile-card shrink-0">
-            <div class="flex items-start justify-between w-full mb-1">
-              <div class="flex items-center gap-2.5">
-                <!-- Custom Potato Icon SVG -->
-                <div class="w-8 h-8 rounded-lg bg-[#933302]/10 text-[#933302] flex items-center justify-center shrink-0">
-                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M18.5 7.5c-1.2-2.3-3.8-3.5-6.5-3.5-3.2 0-6.2 1.8-7.8 4.6C2.6 11.4 2 14.2 3.2 17c1.1 2.5 3.5 4 6.2 4 4.1 0 8.3-2.1 10.1-5.8 1.4-2.8 1.2-5.5-1-7.7zM7 11c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm5 6c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm3-4c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1z"/>
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="font-bold text-sm text-[#1b1c1c] font-headline leading-tight">Potato Crop</h3>
-                  <p class="text-[11px] text-[#3f4941]">3.5 Ha</p>
-                </div>
-              </div>
-              <span class="text-[10px] font-bold text-[#933302] bg-[#ffb599]/30 px-2 py-0.5 rounded whitespace-nowrap ml-1">Attention</span>
-            </div>
-
-            <!-- 270-degree Dial Gauge Meter -->
-            <div class="relative w-36 h-36 my-1 flex items-center justify-center">
-              <svg class="w-full h-full transform rotate-[135deg]" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="36" stroke="#e4e2e1" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="169.6 226.2"/>
-                <!-- Score 61/100 -> Offset = 169.6 * (1 - 0.61) ≈ 66.1 -->
-                <circle cx="50" cy="50" r="36" stroke="#933302" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="169.6 226.2" stroke-dashoffset="66.1"/>
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span class="text-3xl font-extrabold text-[#1b1c1c] font-headline leading-none">61</span>
-                <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1" data-i18n="dash_avg_score">AVG SCORE</span>
-              </div>
-            </div>
-
-            <div class="w-full pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
-              <span class="text-[#3f4941]" data-i18n="dash_action">Action:</span>
-              <span class="font-bold text-[#933302]" data-i18n="dash_needs_irrigation">Needs Irrigation</span>
-            </div>
-          </div>
-
         </div>
       </div>
     </section>
@@ -552,6 +431,131 @@
       }
 
       if (container) container.innerHTML = svgHTML;
+    }
+
+    // ─── Field Health Scores (real data from backend) ──────────────────────
+    const cropEmojis = {
+      'Rice': '🌾', 'Wheat': '🌾', 'Maize': '🌽', 'Cotton': '☁️',
+      'Sugarcane': '🎋', 'Potato': '🥔', 'Grapes': '🍇', 'Soybean': '🫘',
+      'Tur': '🫘', 'Other': '🌱',
+    };
+
+    function getScoreColor(score) {
+      if (score >= 70) return '#006038';
+      if (score >= 40) return '#1a7a4c';
+      return '#933302';
+    }
+
+    function getScoreLabel(severity, triggeredAlert) {
+      if (triggeredAlert) return { text: 'Alert', bg: 'bg-[#933302]/10', color: 'text-[#933302]' };
+      if (severity === 'low') return { text: 'Optimal', bg: 'bg-[#006038]/10', color: 'text-[#006038]' };
+      if (severity === 'medium') return { text: 'Watch', bg: 'bg-[#1a7a4c]/10', color: 'text-[#1a7a4c]' };
+      return { text: 'New', bg: 'bg-[#f0eded]', color: 'text-[#6f7a71]' };
+    }
+
+    function getActionText(field) {
+      if (field.triggeredAlert) return field.diseaseHypothesis?.replace(/_/g, ' ') || 'Risk detected';
+      if (field.severity === 'medium') return 'Monitor closely';
+      if (field.severity === 'low') return 'No action needed';
+      return 'Awaiting data';
+    }
+
+    function getTrendArrow(trend, score, prev) {
+      if (trend === 'up') return '<span class="text-[#006038]">▲</span>';
+      if (trend === 'down') return '<span class="text-[#933302]">▼</span>';
+      return '<span class="text-[#6f7a71]">–</span>';
+    }
+
+    function renderHealthCard(field) {
+      const hasData = field.compositeScore != null;
+      const score = hasData ? field.compositeScore : 0;
+      const color = getScoreColor(score);
+      const label = getScoreLabel(field.severity, field.triggeredAlert);
+      const emoji = cropEmojis[field.cropType] || '🌱';
+      const arcLength = 169.6;
+      const offset = hasData && score > 0 ? arcLength * (1 - score / 100) : arcLength;
+      const actionText = getActionText(field);
+      const trend = getTrendArrow(field.trend, score, field.previousScore);
+      const borderColor = field.triggeredAlert ? 'border-[#ffb599]' : 'border-[#e4e2e1]';
+
+      return `
+        <div class="min-w-[220px] bg-white p-5 rounded-xl border ${borderColor} flex flex-col items-center tactile-card shrink-0">
+          <div class="flex items-start justify-between w-full mb-1">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-[${color}]/10 flex items-center justify-center shrink-0">
+                <span class="text-base">${emoji}</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm text-[#1b1c1c] font-headline leading-tight">${field.farmName}</h3>
+                <p class="text-[11px] text-[#3f4941]">${field.areaHectares?.toFixed(1) || '?'} Ha · ${field.cropType}</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-bold ${label.color} ${label.bg} px-2 py-0.5 rounded whitespace-nowrap ml-1">${label.text}</span>
+          </div>
+
+          <div class="relative w-36 h-36 my-1 flex items-center justify-center">
+            <svg class="w-full h-full transform rotate-[135deg]" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="36" stroke="#e4e2e1" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="${arcLength} 226.2"/>
+              <circle cx="50" cy="50" r="36" stroke="${color}" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="${arcLength} 226.2" stroke-dashoffset="${offset}"/>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span class="text-3xl font-extrabold text-[#1b1c1c] font-headline leading-none">${hasData ? score : '--'}</span>
+              <span class="text-[9px] font-bold text-[#3f4941] uppercase tracking-wider mt-1">Score ${trend}</span>
+            </div>
+          </div>
+
+          <div class="w-full pt-3 border-t border-[#e4e2e1] flex items-center justify-between text-xs">
+            <span class="text-[#3f4941]">Action:</span>
+            <span class="font-semibold ${field.triggeredAlert ? 'text-[#933302]' : 'text-[#006038]'} capitalize">${actionText}</span>
+          </div>
+        </div>`;
+    }
+
+    async function loadHealthScores() {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const loadingEl = document.getElementById('healthLoading');
+      const emptyEl = document.getElementById('healthEmpty');
+      const container = document.getElementById('cropScrollContainer');
+
+      try {
+        const res = await fetch(`${CropSathiPrefs.api}/api/dashboard/health`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+
+        if (!data.success || !data.data?.fields?.length) {
+          loadingEl?.classList.add('hidden');
+          emptyEl?.classList.remove('hidden');
+          return;
+        }
+
+        const fields = data.data.fields;
+        const html = fields.map(renderHealthCard).join('');
+
+        // Replace container content (keep the container itself)
+        container.innerHTML = html;
+        lucide.createIcons();
+
+      } catch (err) {
+        console.error('Failed to load health scores:', err);
+        loadingEl?.classList.add('hidden');
+      }
+    }
+
+    // Load health scores on page load
+    loadHealthScores();
+
+    // If a field was just created, poll until the risk score appears
+    if (localStorage.getItem('newFieldCreated')) {
+      localStorage.removeItem('newFieldCreated');
+      let attempts = 0;
+      const poller = setInterval(() => {
+        loadHealthScores();
+        attempts++;
+        if (attempts >= 5) clearInterval(poller);
+      }, 3000);
     }
 
   </script>

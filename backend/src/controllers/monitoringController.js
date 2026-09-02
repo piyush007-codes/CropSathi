@@ -57,7 +57,8 @@ export async function getRiskLatestEndpoint(req, res) {
     res.status(200).json({
       success: true,
       data: latest || {
-        compositeScore: 0.5,
+        compositeScore: 50,
+        healthLevel: 'watch',
         triggeredAlert: false,
         weatherComponent: 0.5,
         ndviComponent: 0.5,

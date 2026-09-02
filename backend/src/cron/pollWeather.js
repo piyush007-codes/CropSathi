@@ -1,21 +1,16 @@
 import cron from 'node-cron';
 import Field from '../models/Field.js';
-import { pollWeatherForFarm, evaluateWeatherRules } from '../services/weatherService.js';
-import { computeThermalReading } from '../services/thermalService.js';
-import { fetchNdviForFarm, computeNdviComponent } from '../services/ndviService.js';
-import RiskScore from '../models/RiskScore.js';
+import { pollWeatherForFarm } from '../services/weatherService.js';
+import { computeRiskScore } from '../services/riskService.js';
 
 const BATCH_SIZE = parseInt(process.env.CRON_BATCH_SIZE || '200', 10);
 
 /**
- * Poll weather for active farms and recompute risk scores.
+ * Poll weather for active farms and recompute health scores.
  *
  * For each active farm not polled in the last 2 hours:
  *  1. Fetch Open-Meteo weather data
- *  2. Fetch simulated NDVI reading
- *  3. Compute thermal reading from weather
- *  4. Compute 4-component risk fusion score
- *  5. Save RiskScore document
+ *  2. computeRiskScore() handles NDVI, thermal, weather eval, and fusion
  *
  * Farms with tightened monitoring (active cases) are prioritized first.
  */
@@ -48,62 +43,11 @@ async function pollWeatherForActiveFarms() {
 
   for (const farm of farms) {
     try {
-      // 1. Fetch weather + evaluate rules
-      const weatherReading = await pollWeatherForFarm(farm);
-      const weatherEval = evaluateWeatherRules(weatherReading, farm.cropType);
+      // 1. Fetch weather data
+      await pollWeatherForFarm(farm);
 
-      // 2. Fetch NDVI (simulated)
-      const ndviReading = await fetchNdviForFarm(farm);
-      const ndviComponent = await computeNdviComponent(farm._id);
-
-      // 3. Compute thermal from weather
-      let thermalComponent = 0.5;
-      try {
-        const thermalReading = await computeThermalReading(farm, weatherReading);
-        thermalComponent = thermalReading.anomalyC > 0
-          ? Math.min(1, thermalReading.anomalyC / 10)
-          : 0;
-      } catch {
-        // Thermal is best-effort — continue without it
-      }
-
-      // 4. Weighted fusion (same logic as riskService)
-      const CROP_WEIGHTS = {
-        default:  { weather: 0.35, ndvi: 0.30, thermal: 0.15, pestHistory: 0.20 },
-        rice:     { weather: 0.30, ndvi: 0.35, thermal: 0.15, pestHistory: 0.20 },
-        cotton:   { weather: 0.40, ndvi: 0.25, thermal: 0.15, pestHistory: 0.20 },
-        wheat:    { weather: 0.40, ndvi: 0.25, thermal: 0.15, pestHistory: 0.20 },
-      };
-      const BASE_THRESHOLDS = { default: 0.6, rice: 0.55, cotton: 0.6, wheat: 0.6 };
-      const cropKey = farm.cropType?.toLowerCase();
-      const weights = CROP_WEIGHTS[cropKey] || CROP_WEIGHTS.default;
-      const threshold = BASE_THRESHOLDS[cropKey] || BASE_THRESHOLDS.default;
-
-      const compositeScore =
-        weights.weather * weatherEval.score +
-        weights.ndvi * ndviComponent +
-        weights.thermal * thermalComponent +
-        weights.pestHistory * 0; // pest history placeholder
-
-      await RiskScore.create({
-        farmId: farm._id,
-        computedAt: new Date(),
-        weatherComponent: Math.round(weatherEval.score * 1000) / 1000,
-        ndviComponent: Math.round(ndviComponent * 1000) / 1000,
-        thermalComponent: Math.round(thermalComponent * 1000) / 1000,
-        pestHistoryComponent: 0,
-        compositeScore: Math.round(compositeScore * 1000) / 1000,
-        triggeredAlert: compositeScore >= threshold,
-        diseaseHypothesis: weatherEval.diseaseHypothesis,
-        matchedWeatherRules: weatherEval.matchedRules || [],
-        thresholdUsed: threshold,
-        inputsSnapshot: {
-          weatherReadingId: weatherReading._id,
-          ndviReadingId: ndviReading?._id,
-          cropType: farm.cropType,
-          source: 'cron_poll_weather',
-        },
-      });
+      // 2. computeRiskScore orchestrates NDVI, thermal, weather eval, and fusion
+      await computeRiskScore(farm._id);
 
       polled++;
     } catch (err) {

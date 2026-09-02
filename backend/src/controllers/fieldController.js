@@ -1,4 +1,5 @@
 import Field from '../models/Field.js';
+import { computeRiskScore } from '../services/riskService.js';
 
 // @desc    Create a new field
 // @route   POST /api/fields
@@ -31,6 +32,11 @@ export const createField = async (req, res) => {
     res.status(201).json({
       success: true,
       data: field,
+    });
+
+    // Trigger initial risk score computation in background (fire-and-forget)
+    computeRiskScore(field._id).catch(err => {
+      console.error(`⚠️ Initial risk score failed for field ${field._id}:`, err.message);
     });
   } catch (error) {
     res.status(500).json({
@@ -127,6 +133,13 @@ export const updateField = async (req, res) => {
       success: true,
       data: field,
     });
+
+    // Re-compute risk score if crop-related fields changed
+    if (updates.cropType || updates.cropStage) {
+      computeRiskScore(field._id).catch(err => {
+        console.error(`⚠️ Risk score re-computation failed for field ${field._id}:`, err.message);
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,

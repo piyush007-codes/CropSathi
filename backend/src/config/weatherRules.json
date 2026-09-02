@@ -1,6 +1,6 @@
 {
-  "version": "1.0",
-  "description": "Weather-based disease risk rules per (crop, disease). Loaded at startup, cached in memory.",
+  "version": "2.0",
+  "description": "Weather-based disease risk rules v2 — adds wind speed, soil temp, severity bands, crop stage awareness.",
   "rules": {
     "cotton": [
       {
@@ -10,8 +10,13 @@
         "tempMin": 22,
         "tempMax": 32,
         "rainfallMin": 5,
+        "windSpeedMin": 0,
+        "soilTempMin": 20,
+        "soilTempMax": 35,
+        "cropStages": ["flowering", "fruiting"],
         "riskWeight": 0.8,
-        "notes": "Warm, humid conditions favor bollworm activity"
+        "severityBands": { "low": 0.3, "medium": 0.6, "high": 0.85 },
+        "notes": "Warm, humid conditions favor bollworm activity; highest risk during flowering and boll formation"
       },
       {
         "diseaseCode": "cotton_wilt",
@@ -20,7 +25,12 @@
         "tempMin": 25,
         "tempMax": 35,
         "rainfallMin": 0,
+        "windSpeedMin": 0,
+        "soilTempMin": 25,
+        "soilTempMax": 40,
+        "cropStages": ["vegetative", "flowering"],
         "riskWeight": 0.6,
+        "severityBands": { "low": 0.25, "medium": 0.5, "high": 0.7 },
         "notes": "Wilt thrives in warm soil with moisture stress cycles"
       }
     ],
@@ -32,8 +42,13 @@
         "tempMin": 18,
         "tempMax": 28,
         "rainfallMin": 10,
+        "windSpeedMin": 2,
+        "soilTempMin": 15,
+        "soilTempMax": 30,
+        "cropStages": ["vegetative", "flowering", "fruiting"],
         "riskWeight": 0.9,
-        "notes": "Puccinia requires leaf wetness + high humidity"
+        "severityBands": { "low": 0.35, "medium": 0.65, "high": 0.9 },
+        "notes": "Puccinia requires leaf wetness + high humidity; wind spreads spores between plants"
       },
       {
         "diseaseCode": "soybean_leaf_spot",
@@ -42,7 +57,12 @@
         "tempMin": 20,
         "tempMax": 30,
         "rainfallMin": 5,
+        "windSpeedMin": 0,
+        "soilTempMin": 18,
+        "soilTempMax": 32,
+        "cropStages": ["vegetative", "flowering"],
         "riskWeight": 0.65,
+        "severityBands": { "low": 0.25, "medium": 0.5, "high": 0.7 },
         "notes": "Cercospora leaf spot favored by warm wet conditions"
       }
     ],
@@ -54,7 +74,12 @@
         "tempMin": 25,
         "tempMax": 35,
         "rainfallMin": 0,
+        "windSpeedMin": 0,
+        "soilTempMin": 25,
+        "soilTempMax": 38,
+        "cropStages": ["vegetative", "flowering"],
         "riskWeight": 0.7,
+        "severityBands": { "low": 0.25, "medium": 0.5, "high": 0.7 },
         "notes": "Fusarium wilt favors warm, poorly drained soils"
       },
       {
@@ -64,7 +89,12 @@
         "tempMin": 20,
         "tempMax": 30,
         "rainfallMin": 5,
+        "windSpeedMin": 0,
+        "soilTempMin": 18,
+        "soilTempMax": 30,
+        "cropStages": ["flowering", "fruiting"],
         "riskWeight": 0.75,
+        "severityBands": { "low": 0.3, "medium": 0.55, "high": 0.8 },
         "notes": "Helicoverpa activity peaks in warm humid monsoon"
       }
     ],
@@ -76,8 +106,13 @@
         "tempMin": 12,
         "tempMax": 22,
         "rainfallMin": 2,
+        "windSpeedMin": 3,
+        "soilTempMin": 10,
+        "soilTempMax": 25,
+        "cropStages": ["vegetative", "flowering"],
         "riskWeight": 0.85,
-        "notes": "Stripe/leaf rust requires cool moist conditions"
+        "severityBands": { "low": 0.3, "medium": 0.6, "high": 0.85 },
+        "notes": "Stripe/leaf rust requires cool moist conditions; wind carries urediniospores long distances"
       },
       {
         "diseaseCode": "wheat_powdery_mildew",
@@ -86,7 +121,12 @@
         "tempMin": 15,
         "tempMax": 25,
         "rainfallMin": 0,
+        "windSpeedMin": 0,
+        "soilTempMin": 12,
+        "soilTempMax": 28,
+        "cropStages": ["vegetative", "flowering"],
         "riskWeight": 0.6,
+        "severityBands": { "low": 0.2, "medium": 0.45, "high": 0.65 },
         "notes": "High humidity without free water; moderate temps"
       }
     ],
@@ -98,7 +138,12 @@
         "tempMin": 25,
         "tempMax": 30,
         "rainfallMin": 15,
+        "windSpeedMin": 0,
+        "soilTempMin": 22,
+        "soilTempMax": 32,
+        "cropStages": ["vegetative", "flowering", "fruiting"],
         "riskWeight": 0.95,
+        "severityBands": { "low": 0.4, "medium": 0.7, "high": 0.95 },
         "notes": "Magnaporthe oryzae thrives in warm, saturated conditions"
       },
       {
@@ -108,7 +153,12 @@
         "tempMin": 28,
         "tempMax": 35,
         "rainfallMin": 10,
+        "windSpeedMin": 0,
+        "soilTempMin": 25,
+        "soilTempMax": 38,
+        "cropStages": ["flowering", "fruiting"],
         "riskWeight": 0.8,
+        "severityBands": { "low": 0.3, "medium": 0.6, "high": 0.8 },
         "notes": "Xanthomonas favored by high temp + flooding"
       }
     ],
@@ -120,7 +170,12 @@
         "tempMin": 22,
         "tempMax": 32,
         "rainfallMin": 5,
+        "windSpeedMin": 0,
+        "soilTempMin": 20,
+        "soilTempMax": 35,
+        "cropStages": ["vegetative", "flowering"],
         "riskWeight": 0.8,
+        "severityBands": { "low": 0.3, "medium": 0.6, "high": 0.85 },
         "notes": "Spodoptera frugiperda favors warm humid conditions"
       }
     ],
@@ -132,8 +187,13 @@
         "tempMin": 15,
         "tempMax": 22,
         "rainfallMin": 5,
+        "windSpeedMin": 2,
+        "soilTempMin": 12,
+        "soilTempMax": 25,
+        "cropStages": ["vegetative", "flowering", "fruiting"],
         "riskWeight": 0.95,
-        "notes": "Phytophthora infestans — cool, wet conditions ideal"
+        "severityBands": { "low": 0.35, "medium": 0.65, "high": 0.95 },
+        "notes": "Phytophthora infestans — cool, wet conditions ideal; wind spreads sporangia"
       }
     ],
     "sugarcane": [
@@ -144,7 +204,12 @@
         "tempMin": 25,
         "tempMax": 35,
         "rainfallMin": 5,
+        "windSpeedMin": 0,
+        "soilTempMin": 22,
+        "soilTempMax": 38,
+        "cropStages": ["vegetative", "flowering", "fruiting"],
         "riskWeight": 0.7,
+        "severityBands": { "low": 0.25, "medium": 0.5, "high": 0.7 },
         "notes": "Colletotrichum favored by warm, humid conditions"
       }
     ],
@@ -156,7 +221,12 @@
         "tempMin": 20,
         "tempMax": 28,
         "rainfallMin": 5,
+        "windSpeedMin": 0,
+        "soilTempMin": 18,
+        "soilTempMax": 30,
+        "cropStages": ["vegetative", "flowering", "fruiting"],
         "riskWeight": 0.8,
+        "severityBands": { "low": 0.3, "medium": 0.55, "high": 0.8 },
         "notes": "Plasmopara viticola requires warm, wet conditions"
       }
     ]
@@ -166,6 +236,10 @@
     "tempMin": 18,
     "tempMax": 30,
     "rainfallMin": 5,
-    "riskWeight": 0.5
+    "windSpeedMin": 0,
+    "soilTempMin": 15,
+    "soilTempMax": 35,
+    "riskWeight": 0.5,
+    "severityBands": { "low": 0.2, "medium": 0.45, "high": 0.65 }
   }
 }

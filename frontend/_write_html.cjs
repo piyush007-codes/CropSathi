@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+const fs = require('fs');
+const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -38,15 +39,7 @@
   </aside>
 
   <main class="flex-1 p-6 md:p-10 max-w-7xl mx-auto overflow-y-auto md:ml-64">
-    <header class="mb-8 flex items-start justify-between">
-      <div>
-        <h1 class="text-3xl font-bold font-headline">Diagnose</h1>
-        <p class="text-[#3f4941] text-sm mt-1">Upload crop photos for AI-powered disease identification</p>
-      </div>
-      <button onclick="showUploadModal()" class="flex items-center gap-2 px-5 py-2.5 bg-[#006038] text-white font-semibold rounded-full hover:bg-[#1a7a4c] transition shadow-sm flex-shrink-0 mt-1">
-        <i data-lucide="camera" class="w-4 h-4"></i><span>New Diagnosis</span>
-      </button>
-    </header>
+    <header class="mb-8"><h1 class="text-3xl font-bold font-headline">Diagnose</h1><p class="text-[#3f4941] text-sm mt-1">Upload crop photos for AI-powered disease identification</p></header>
 
     <!-- Alert Banner -->
     <div id="alertBanner" class="hidden bg-[#933302]/10 border border-[#933302]/30 rounded-xl p-4 mb-6">
@@ -80,26 +73,31 @@
         <h3 class="font-headline font-bold text-lg">Upload Crop Photos</h3>
         <button onclick="closeUploadModal()" class="w-8 h-8 rounded-full bg-[#f0eded] flex items-center justify-center hover:bg-[#eae8e7]"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
-      <!-- Step 1 -->
+      <!-- Step 1: Select field + upload images -->
       <div id="uploadStep1">
         <p class="text-sm text-[#3f4941] mb-2">Select the field:</p>
         <select id="uploadFarmSelect" class="w-full px-4 py-2.5 border border-[#e4e2e1] rounded-xl text-sm mb-4"><option value="">Select a field...</option></select>
+
+        <!-- Thumbnail strip -->
         <div id="thumbStrip" class="hidden flex gap-2 mb-3 thumb-strip overflow-x-auto pb-1"></div>
+
+        <!-- Drop zone / Add more -->
         <div id="photoDropZone" class="border-2 border-dashed border-[#e4e2e1] rounded-xl p-6 text-center cursor-pointer hover:border-[#006038] transition">
           <i data-lucide="camera" class="w-8 h-8 text-[#6f7a71] mx-auto mb-1"></i>
           <p class="text-sm font-semibold text-[#3f4941]" id="dropZoneText">Tap to take photo or upload</p>
           <p class="text-xs text-[#6f7a71] mt-1" id="dropZoneHint">Up to 5 images</p>
           <input type="file" id="photoInput" accept="image/*" capture="environment" multiple class="hidden">
         </div>
+
         <button id="diagnoseBtn" onclick="submitForDiagnosis()" disabled class="w-full mt-4 px-4 py-3 bg-[#006038] text-white font-semibold rounded-full disabled:opacity-50 hover:bg-[#1a7a4c] transition">Diagnose</button>
       </div>
-      <!-- Step 2 -->
+      <!-- Step 2: Processing -->
       <div id="uploadStep2" class="hidden text-center py-8">
         <div class="w-16 h-16 rounded-full bg-[#006038]/10 flex items-center justify-center mx-auto mb-4"><i data-lucide="loader-2" class="w-8 h-8 text-[#006038] animate-spin"></i></div>
         <h4 class="font-headline font-bold text-lg">Diagnosing...</h4>
         <p class="text-sm text-[#6f7a71] mt-1">AI is analyzing your photos</p>
       </div>
-      <!-- Step 3 -->
+      <!-- Step 3: Result -->
       <div id="uploadStep3" class="hidden text-center py-8">
         <div id="resultIcon" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"></div>
         <h4 id="resultTitle" class="font-headline font-bold text-lg mb-1"></h4>
@@ -117,28 +115,9 @@
       <p class="text-sm text-[#6f7a71] mb-5">This action cannot be undone.</p>
       <div class="flex gap-3">
         <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 border border-[#e4e2e1] text-[#3f4941] font-semibold rounded-full hover:bg-[#f0eded] transition">Cancel</button>
-        
         <button onclick="confirmDelete()" class="flex-1 px-4 py-2.5 bg-[#ba1a1a] text-white font-semibold rounded-full hover:bg-[#9a1515] transition">Delete</button>
       </div>
     </div>
   </div>
 
-  <!-- Case Detail Modal -->
-  <div id="caseDetailModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-lg max-h-[85vh] overflow-y-auto tactile-card">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="font-headline font-bold text-lg">Case Details</h3>
-        <button onclick="closeCaseDetail()" class="w-8 h-8 rounded-full bg-[#f0eded] flex items-center justify-center hover:bg-[#eae8e7]"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-      <div id="caseDetailContent"><div class="text-center py-8 text-sm text-[#6f7a71]">Loading...</div></div>
-    </div>
-  </div>
-
-  <!-- Full Image Viewer -->
-  <div id="imageViewer" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[70] p-4 cursor-pointer" onclick="closeImageViewer()">
-    <img id="viewerImg" class="max-w-full max-h-full object-contain rounded-lg" />
-  </div>
-
-  <script src="diagnose.js"></script>
-</body>
-</html>
+  <!-- Case

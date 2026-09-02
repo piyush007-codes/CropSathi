@@ -25,36 +25,32 @@ const diagnosisCaseSchema = new mongoose.Schema({
     type: String,
     enum: [
       'awaiting_photo',
-      'awaiting_sync',
-      'on_device_screened',
-      'pending_server_confirmation',
-      'confirmed',
-      'false_alarm',
-      'ambiguous_recapture_requested',
-      'escalated',
-      'resolved',
+      'diagnosing',
+      'report_ready',
+      'retry_failed',
+      'deleted',
     ],
     default: 'awaiting_photo',
   },
-  // On-device screening result (synced from app, not authoritative)
-  onDeviceResult: {
-    diseaseCode: { type: String, default: null },
+  // Gemini AI diagnosis result (structured)
+  geminiResult: {
+    imageQualityOk: { type: Boolean, default: null },
+    cropIdentified: { type: String, default: null },
+    detectedIssue: { type: String, default: null },
     confidence: { type: Number, default: null },
+    severity: { type: String, enum: ['none', 'mild', 'moderate', 'severe', null], default: null },
+    symptomsObserved: [{ type: String }],
+    matchesRiskSignal: { type: Boolean, default: null },
+    notes: { type: String, default: null },
     modelVersion: { type: String, default: null },
   },
-  // Server-side confirmation result (authoritative)
-  serverResult: {
-    diseaseCode: { type: String, default: null },
-    confidence: { type: Number, default: null },
-    modelVersion: { type: String, default: null },
-    severity: { type: String, enum: ['low', 'medium', 'high', 'critical', null], default: null },
-  },
+  // Summary fields for quick access
   finalDiseaseCode: { type: String, default: null },
-  finalSeverity: { type: String, enum: ['low', 'medium', 'high', 'critical', null], default: null },
+  finalSeverity: { type: String, enum: ['none', 'mild', 'moderate', 'severe', null], default: null },
   confidence: { type: Number, default: null },
   outcome: {
     type: String,
-    enum: ['confirmed_treated', 'false_alarm', 'escalated_unresolved', null],
+    enum: ['confirmed', 'false_alarm', 'expert_review', 'retry', null],
     default: null,
   },
   requiresExpertReview: { type: Boolean, default: false },
@@ -63,7 +59,7 @@ const diagnosisCaseSchema = new mongoose.Schema({
     lng: { type: Number, default: null },
   },
   capturedAt: { type: Date, default: Date.now },
-  syncedAt: { type: Date, default: null },
+  deletedAt: { type: Date, default: null },
 }, { timestamps: true });
 
 diagnosisCaseSchema.index({ farmId: 1, status: 1 });

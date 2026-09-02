@@ -1,4 +1,4 @@
-import { createCase, uploadPhoto, getCaseDetail, listCasesForFarm, requestRecapture } from '../services/diagnosisService.js';
+import { createCase, uploadPhotos, deleteCase, getCaseDetail, listCasesForFarm } from '../services/diagnosisService.js';
 
 export async function createCaseEndpoint(req, res) {
   try {
@@ -7,8 +7,7 @@ export async function createCaseEndpoint(req, res) {
       return res.status(400).json({ success: false, message: 'farmId and triggeredBy are required' });
     }
     const diagnosisCase = await createCase({
-      farmId, userId: req.user._id, triggeredBy,
-      triggeringRiskScoreId, gpsPoint,
+      farmId, userId: req.user._id, triggeredBy, triggeringRiskScoreId, gpsPoint,
     });
     res.status(201).json({ success: true, data: diagnosisCase });
   } catch (err) {
@@ -17,21 +16,32 @@ export async function createCaseEndpoint(req, res) {
   }
 }
 
-export async function uploadPhotoEndpoint(req, res) {
+export async function uploadPhotosEndpoint(req, res) {
   try {
     const { caseId } = req.params;
-    const fileInfo = {
-      storageKey: req.file ? 'cases/' + caseId + '/' + req.file.filename : 'mock/photo.jpg',
-      filename: req.file?.originalname || 'photo.jpg',
-      mimeType: req.file?.mimetype || 'image/jpeg',
-      fileSize: req.file?.size || 0,
-    };
-    const onDeviceResult = req.body.onDeviceResult ? JSON.parse(req.body.onDeviceResult) : null;
-    const { diagnosisCase, photo } = await uploadPhoto(caseId, fileInfo, onDeviceResult);
-    res.status(201).json({ success: true, data: { diagnosisCase, photo } });
+    const files = (req.files || []).map(f => ({
+      storageKey: 'cases/' + caseId + '/' + f.filename || ('cases/' + caseId + '/' + f.filename),
+      filename: f.originalname || 'photo.jpg',
+      mimeType: f.mimetype || 'image/jpeg',
+      fileSize: f.size || 0,
+    }));
+    if (files.length === 0) {
+      files.push({ storageKey: 'cases/' + caseId + '/photo.jpg', filename: 'photo.jpg', mimeType: 'image/jpeg', fileSize: 0 });
+    }
+    const { diagnosisCase, photos } = await uploadPhotos(caseId, files);
+    res.status(201).json({ success: true, data: { diagnosisCase, photos } });
   } catch (err) {
-    console.error('Error uploading photo:', err);
+    console.error('Error uploading photos:', err);
     res.status(500).json({ success: false, message: err.message });
+  }
+}
+
+export async function deleteCaseEndpoint(req, res) {
+  try {
+    const dc = await deleteCase(req.params.caseId, req.user._id);
+    res.json({ success: true, data: dc });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
   }
 }
 
@@ -57,14 +67,5 @@ export async function listCasesEndpoint(req, res) {
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
-  }
-}
-
-export async function recaptureEndpoint(req, res) {
-  try {
-    const dc = await requestRecapture(req.params.caseId);
-    res.json({ success: true, data: dc });
-  } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
   }
 }

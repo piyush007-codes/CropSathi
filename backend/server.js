@@ -10,6 +10,7 @@ import monitoringRoutes from './src/routes/monitoringRoutes.js';
 import analyticsRoutes from './src/routes/analyticsRoutes.js';
 import advisoryRoutes from './src/routes/advisoryRoutes.js';
 import dashboardRoutes from './src/routes/dashboardRoutes.js';
+import diagnosisRoutes from './src/routes/diagnosisRoutes.js';
 import { protect } from './src/middleware/authMiddleware.js';
 import User from './src/models/User.js';
 import { startCronJobs, mountCronRoutes } from './src/cron/scheduler.js';
@@ -55,6 +56,7 @@ app.use('/api/monitoring', monitoringRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/advisory', advisoryRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/diagnosis', diagnosisRoutes);
 
 // Health Check
 app.get('/api/test', (req, res) => {

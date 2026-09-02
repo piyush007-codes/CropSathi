@@ -291,22 +291,22 @@
 
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
         <div class="bg-[#006038]/10 border-2 border-[#006038] p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer transition tactile-card">
-          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 text-2xl shadow-sm">🌾</div>
+          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 shadow-sm"><i data-lucide="wheat" class="w-6 h-6 text-[#006038]"></i></div>
           <span class="text-sm font-semibold text-[#006038]">Rice</span>
         </div>
 
         <div class="bg-[#f0eded] hover:bg-[#eae8e7] border border-[#e4e2e1] p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer transition">
-          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 text-2xl shadow-sm">🌽</div>
+          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 shadow-sm"><i data-lucide="wheat" class="w-6 h-6 text-[#006038]"></i></div>
           <span class="text-sm font-semibold text-[#1b1c1c]">Corn</span>
         </div>
 
         <div class="bg-[#f0eded] hover:bg-[#eae8e7] border border-[#e4e2e1] p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer transition">
-          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 text-2xl shadow-sm">🍇</div>
+          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 shadow-sm"><i data-lucide="grape" class="w-6 h-6 text-[#006038]"></i></div>
           <span class="text-sm font-semibold text-[#1b1c1c]">Grapes</span>
         </div>
 
         <div class="bg-[#f0eded] hover:bg-[#eae8e7] border border-[#e4e2e1] p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer transition">
-          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 text-2xl shadow-sm">🥔</div>
+          <div class="w-12 h-12 rounded-full bg-[#ffffff] flex items-center justify-center mb-2 shadow-sm"><i data-lucide="apple" class="w-6 h-6 text-[#006038]"></i></div>
           <span class="text-sm font-semibold text-[#1b1c1c]">Potato</span>
         </div>
 
@@ -435,9 +435,9 @@
 
     // ─── Field Health Scores (real data from backend) ──────────────────────
     const cropEmojis = {
-      'Rice': '🌾', 'Wheat': '🌾', 'Maize': '🌽', 'Cotton': '☁️',
-      'Sugarcane': '🎋', 'Potato': '🥔', 'Grapes': '🍇', 'Soybean': '🫘',
-      'Tur': '🫘', 'Other': '🌱',
+      'Rice': 'wheat', 'Wheat': 'wheat', 'Maize': 'wheat', 'Cotton': 'cloud',
+      'Sugarcane': 'sprout', 'Potato': 'apple', 'Grapes': 'grape', 'Soybean': 'sprout',
+      'Tur': 'sprout', 'Other': 'sprout',
     };
 
     function getScoreColor(score) {
@@ -471,7 +471,7 @@
       const score = hasData ? field.compositeScore : 0;
       const color = getScoreColor(score);
       const label = getScoreLabel(field.severity, field.triggeredAlert);
-      const emoji = cropEmojis[field.cropType] || '🌱';
+      const iconName = cropEmojis[field.cropType] || 'sprout';
       const arcLength = 169.6;
       const offset = hasData && score > 0 ? arcLength * (1 - score / 100) : arcLength;
       const actionText = getActionText(field);
@@ -483,7 +483,7 @@
           <div class="flex items-start justify-between w-full mb-1">
             <div class="flex items-center gap-2.5">
               <div class="w-8 h-8 rounded-lg bg-[${color}]/10 flex items-center justify-center shrink-0">
-                <span class="text-base">${emoji}</span>
+                <span class="text-base"><i data-lucide="${iconName}" class="w-5 h-5 text-[#006038]"></i></span>
               </div>
               <div>
                 <h3 class="font-bold text-sm text-[#1b1c1c] font-headline leading-tight">${field.farmName}</h3>

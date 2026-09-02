@@ -247,14 +247,14 @@
 
     // Crop type emoji mapping
     const cropEmojis = {
-      'Wheat': '🌾',
-      'Rice': '🌾',
-      'Maize': '🌽',
+      'Wheat': 'wheat',
+      'Rice': 'wheat',
+      'Maize': 'wheat',
       'Cotton': '☁️',
       'Sugarcane': '🎋',
-      'Potato': '🥔',
-      'Grapes': '🍇',
-      'Other': '🌱',
+      'Potato': 'apple',
+      'Grapes': 'grape',
+      'Other': 'sprout',
     };
 
     // Random field images for demo
@@ -343,7 +343,7 @@
             <div class="absolute bottom-3 left-3 right-3">
               <h3 class="font-bold text-[#ffffff] font-headline text-lg">${CropSathiPrefs.escapeHtml(field.name)}</h3>
               <p class="text-xs text-[#ffffff]/90 flex items-center gap-1 mt-0.5">
-                <span class="text-base">${cropEmojis[field.cropType] || '🌱'}</span> ${CropSathiPrefs.escapeHtml(field.cropType)} · ${field.areaInHectares.toFixed(1)} hectares
+                <span class="text-base"><i data-lucide="${cropEmojis[field.cropType] || 'sprout'}" class="w-4 h-4 text-[#006038]"></i></span> ${CropSathiPrefs.escapeHtml(field.cropType)} · ${field.areaInHectares.toFixed(1)} hectares
               </p>
             </div>
           </div>
@@ -412,7 +412,7 @@
 
       // Populate modal data
       document.getElementById('detailTitle').textContent = field.name;
-      document.getElementById('detailCrop').textContent = `${cropEmojis[field.cropType] || '🌱'} ${field.cropType}`;
+      document.getElementById('detailCrop').innerHTML = `<i data-lucide="${cropEmojis[field.cropType] || 'sprout'}" class="w-4 h-4 text-[#006038]"></i> ${field.cropType}`;
       document.getElementById('detailAreaHa').textContent = `${field.areaInHectares.toFixed(2)} ha`;
       document.getElementById('detailAreaAc').textContent = `${field.areaInAcres.toFixed(2)} ac`;
       document.getElementById('detailSowing').textContent = field.sowingDate
